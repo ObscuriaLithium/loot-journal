@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.obscuria.lootjournal.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "loot_journal.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "ClientPacketListenerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

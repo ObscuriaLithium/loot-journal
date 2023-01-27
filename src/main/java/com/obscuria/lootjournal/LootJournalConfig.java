@@ -1,7 +1,10 @@
 package com.obscuria.lootjournal;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@OnlyIn(Dist.CLIENT)
 public class LootJournalConfig {
 
     public static class Client {
@@ -31,17 +35,13 @@ public class LootJournalConfig {
         }
     }
 
-    public static void init() {
+    public static void load() {
         Path configPath = FMLPaths.CONFIGDIR.get();
-        Path bopConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "Obscuria");
-        try {
-            Files.createDirectory(bopConfigPath);
-        } catch (FileAlreadyExistsException ignored) {
-        } catch (IOException e) {
-            LootJournal.LOGGER.error("Failed to create Obscuria config directory", e);
-        }
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, Client.CLIENT_SPEC,
-                "Obscuria/loot-journal-client.toml");
+        Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "Obscuria");
+        try { Files.createDirectory(modConfigPath); }
+        catch (FileAlreadyExistsException ignored) {}
+        catch (IOException e) { LootJournalMod.LOGGER.error("Failed to create Obscuria config directory", e); }
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.CLIENT_SPEC, "Obscuria/loot-journal-client.toml");
     }
 }
 

@@ -1,23 +1,32 @@
 modLoader = "javafml"
-loaderVersion = "[41,)"
+loaderVersion = "[43,)"
 license = "Obscuria Lithium (c) 2022, All Rights Reserved"
+
 [[mods]]
-modId = "loot_journal"
-version = "1.1.0"
-displayName = "Loot Journal"
-logoFile = "none.png"
-credits = "Everyone who supports me on Patreon!"
-authors = "Obscuria"
-description = '''
-Loot Journal adds a log of the
-items you have picked up and
-counts the total number of
-similar items in your inventory
-'''
+    modId = "loot_journal"
+    version = "2"
+    displayName = "Loot Journal"
+    logoFile = "none.png"
+    credits = "Everyone who supports me on Patreon!"
+    authors = "Obscuria"
+    displayTest = "IGNORE_ALL_VERSION"
+    description = '''
+    Loot Journal adds a log of the
+    items you have picked up and
+    counts the total number of
+    similar items in your inventory
+    '''
 
 [[dependencies.loot_journal]]
-modId = "forge"
-mandatory = true
-versionRange = "[41,)"
-ordering = "NONE"
-side = "BOTH"
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.19.2,)"
+    ordering = "NONE"
+    side = "CLIENT"
+
+[[dependencies.loot_journal]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "[43.2.0,)"
+    ordering = "NONE"
+    side = "CLIENT"
