@@ -8,7 +8,7 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class Pickup {
-    private static final float MAX_LIFETIME = LootJournalConfig.Client.pickupLifetime.get();
+    private static final float MAX_LIFETIME = LootJournalConfig.Client.lifetime.get();
     private static final float MAX_OFFSET = 180f;
     public int lifetime;
     public float offset = MAX_OFFSET;

@@ -1,5 +1,6 @@
 package com.obscuria.lootjournal;
 
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -19,17 +20,19 @@ public class LootJournalConfig {
     public static class Client {
         public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
         public static final ForgeConfigSpec CLIENT_SPEC;
-        public static final ForgeConfigSpec.BooleanValue pickupDisplay;
-        public static final ForgeConfigSpec.BooleanValue pickupStyle;
-        public static final ForgeConfigSpec.IntValue pickupLifetime;
-        public static final ForgeConfigSpec.IntValue pickupOffset;
+        public static final ForgeConfigSpec.EnumValue<PickupStyle> style;
+        public static final ForgeConfigSpec.IntValue lifetime;
+        public static final ForgeConfigSpec.IntValue offset;
+        public static final ForgeConfigSpec.BooleanValue useCustomColor;
+        public static final ForgeConfigSpec.EnumValue<ChatFormatting> customColor;
 
         static {
-            BUILDER.push("LootNotifier");
-            pickupDisplay = BUILDER.worldRestart().define("Display", true);
-            pickupStyle = BUILDER.worldRestart().define("Style", true);
-            pickupLifetime = BUILDER.worldRestart().defineInRange("Lifetime", 5, 0, 20);
-            pickupOffset = BUILDER.worldRestart().defineInRange("Offset", 0, 0, 1080);
+            BUILDER.push("PickupNotifier");
+            style = BUILDER.worldRestart().defineEnum("Style", PickupStyle.COMMON);
+            lifetime = BUILDER.worldRestart().defineInRange("Lifetime", 5, 0, 20);
+            offset = BUILDER.worldRestart().defineInRange("Offset", 0, 0, 1080);
+            useCustomColor = BUILDER.worldRestart().comment("If false, the item's rarity color will be used").define("UseCustomColor", false);
+            customColor = BUILDER.worldRestart().defineEnum("CustomColor", ChatFormatting.WHITE);
             BUILDER.pop();
             CLIENT_SPEC = BUILDER.build();
         }
@@ -42,6 +45,10 @@ public class LootJournalConfig {
         catch (FileAlreadyExistsException ignored) {}
         catch (IOException e) { LootJournalMod.LOGGER.error("Failed to create Obscuria config directory", e); }
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.CLIENT_SPEC, "Obscuria/loot-journal-client.toml");
+    }
+
+    public enum PickupStyle {
+        COMMON, WITHOUT_BACKGROUND;
     }
 }
 
