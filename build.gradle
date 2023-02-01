@@ -19,7 +19,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '2'
+version = '2.1'
 group = 'com.obscuria.lootjournal'
 archivesBaseName = 'loot_journal'
 

@@ -4,7 +4,7 @@ license = "Obscuria Lithium (c) 2023, All Rights Reserved."
 
 [[mods]]
     modId = "loot_journal"
-    version = "2"
+    version = "2.1"
     displayName = "Loot Journal"
     logoFile = "none.png"
     updateJSONURL="https://raw.githubusercontent.com/ObscuriaLithium/Home/main/loot_journal/versions.json"
