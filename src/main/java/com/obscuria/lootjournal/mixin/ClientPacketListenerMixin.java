@@ -14,7 +14,8 @@ public abstract class ClientPacketListenerMixin {
     @Inject(method = "handleTakeItemEntity",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/util/thread/BlockableEventLoop;)V", shift = At.Shift.AFTER))
+                    target = "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/util/thread/BlockableEventLoop;)V",
+                    shift = At.Shift.AFTER))
     public void handleTakeItemEntity$invokeEnsureRunningOnSameThread(ClientboundTakeItemEntityPacket packet, CallbackInfo ci) {
         PickupComponent.append(packet.getItemId(), packet.getPlayerId(), packet.getAmount());
     }
