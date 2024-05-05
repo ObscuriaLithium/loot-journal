@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[44,)"
 license = "Obscuria Lithium (c) 2024, All Rights Reserved."
 
 [[mods]]
@@ -18,13 +18,13 @@ license = "Obscuria Lithium (c) 2024, All Rights Reserved."
 [[dependencies.loot_journal]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19.2,)"
+    versionRange = "[1.19.3,)"
     ordering = "NONE"
     side = "CLIENT"
 
 [[dependencies.loot_journal]]
     modId = "forge"
     mandatory = true
-    versionRange = "[43.3.0,)"
+    versionRange = "[44.1.0,)"
     ordering = "NONE"
     side = "CLIENT"
