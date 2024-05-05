@@ -1,21 +1,18 @@
 modLoader = "javafml"
 loaderVersion = "[43,)"
-license = "Obscuria Lithium (c) 2023, All Rights Reserved."
+license = "Obscuria Lithium (c) 2024, All Rights Reserved."
 
 [[mods]]
     modId = "loot_journal"
-    version = "2.1"
+    version = "3"
     displayName = "Loot Journal"
-    logoFile = "none.png"
-    updateJSONURL="https://raw.githubusercontent.com/ObscuriaLithium/Home/main/loot_journal/versions.json"
     credits = "Everyone who supports me on Patreon!"
     authors = "Obscuria"
     displayTest = "IGNORE_ALL_VERSION"
     description = '''
-    Loot Journal adds a log of the
-    items you have picked up and
-    counts the total number of
-    similar items in your inventory.
+    Loot journal displays notifications about
+    picking up items and counts the total number
+    of the same items in the inventory.
     '''
 
 [[dependencies.loot_journal]]
@@ -28,6 +25,6 @@ license = "Obscuria Lithium (c) 2023, All Rights Reserved."
 [[dependencies.loot_journal]]
     modId = "forge"
     mandatory = true
-    versionRange = "[43.2.0,)"
+    versionRange = "[43.3.0,)"
     ordering = "NONE"
     side = "CLIENT"
