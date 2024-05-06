@@ -110,8 +110,6 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Vendor'   : mod_authors
         ])
     }
-
-    finalizedBy 'reobfJar'
 }
 
 publishing {
