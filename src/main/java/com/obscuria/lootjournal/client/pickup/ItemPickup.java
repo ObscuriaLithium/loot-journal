@@ -60,7 +60,7 @@ public class ItemPickup extends Pickup {
 
     @Override
     public void renderIcon(PoseStack pose, long time) {
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(stack, -8, -8);
+        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(pose, stack, -8, -8);
     }
 
     private void countTotal(int origin) {

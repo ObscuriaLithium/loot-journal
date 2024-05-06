@@ -1,6 +1,7 @@
 package com.obscuria.lootjournal.client;
 
 import com.obscuria.lootjournal.LootJournalConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.CreativeModeTab;
@@ -50,9 +51,14 @@ public final class Filtering {
                 .toList();
     }
 
+    @SuppressWarnings("all")
     private static void tryRebuildTabContents() {
-        if (CreativeModeTabs.CACHED_ENABLED_FEATURES == null)
-            CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, false);
+        final var player = Minecraft.getInstance().player;
+        final var tabs = new CreativeModeTabs();
+        if (player != null
+                && tabs instanceof TabsAccessor accessor
+                && accessor.lootJournal$ShouldRebuild())
+            CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, false, player.level.registryAccess());
     }
 
     private static Stream<ResourceLocation> unwrapIds(List<? extends String> list) {

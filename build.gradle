@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
@@ -19,7 +20,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '3'
+version = '3.1.0'
 group = 'com.obscuria.lootjournal'
 archivesBaseName = 'loot_journal'
 
@@ -27,7 +28,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'official', version: '1.19.3'
+    mappings channel: 'official', version: '1.19.4'
     runs {
         client {
             workingDirectory project.file('run')
@@ -96,10 +97,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.2.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    runtimeOnly fg.deobf("curse.maven:configured-457570:4462839")
+    runtimeOnly fg.deobf("curse.maven:configured-457570:4462894")
 }
 
 jar {

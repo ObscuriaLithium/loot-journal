@@ -54,13 +54,13 @@ public enum Style {
             GuiComponent.blit(pose, -26 - totalWidth, 1, 0, 12, 256, 10, 256, 256);
             GuiComponent.drawString(pose, font, name, -29 - nameWidth - totalWidth, 2, 0xffffff);
             GuiComponent.drawString(pose, font, total.withStyle(ChatFormatting.GRAY), -totalWidth, 2, 0xffffff);
-            renderIcon(pickup, pose, x - 11 - totalWidth, y + 6, time);
+            renderIcon(pickup, pose, -11 - totalWidth, 6, time);
         } else {
             GuiComponent.blit(pose, -218 + nameWidth + totalWidth, 0, 0, 0, 256, 12, 256, 256);
             GuiComponent.blit(pose, -230 + totalWidth, 1, 0, 12, 256, 10, 256, 256);
             GuiComponent.drawString(pose, font, name, 30 + totalWidth, 2, 0xffffff);
             GuiComponent.drawString(pose, font, total.withStyle(ChatFormatting.GRAY), 5, 2, 0xffffff);
-            renderIcon(pickup, pose, x + 11 + totalWidth, y + 6, time);
+            renderIcon(pickup, pose, 11 + totalWidth, 6, time);
         }
     }
 
@@ -72,12 +72,12 @@ public enum Style {
             GuiComponent.fill(pose, -3, 0, -25 - nameWidth - totalWidth, 12, 0x80000000);
             GuiComponent.drawString(pose, font, name, -23 - nameWidth - totalWidth, 2, 0xffffff);
             GuiComponent.drawString(pose, font, total.withStyle(ChatFormatting.GRAY), -totalWidth, 2, 0xffffff);
-            renderIcon(pickup, pose, x - 11 - totalWidth, y + 6, time);
+            renderIcon(pickup, pose, -11 - totalWidth, 6, time);
         } else {
             GuiComponent.fill(pose, 3, 0, 25 + nameWidth + totalWidth, 12, 0x80000000);
             GuiComponent.drawString(pose, font, name, 23 + totalWidth, 2, 0xffffff);
             GuiComponent.drawString(pose, font, total.withStyle(ChatFormatting.GRAY), 5, 2, 0xffffff);
-            renderIcon(pickup, pose, x + 11 + totalWidth, y + 6, time);
+            renderIcon(pickup, pose, 11 + totalWidth, 6, time);
         }
     }
 
@@ -88,20 +88,20 @@ public enum Style {
         if (anchor.isInverted()) {
             GuiComponent.drawString(pose, font, name, -23 - nameWidth - totalWidth, 2, 0xffffff);
             GuiComponent.drawString(pose, font, total.withStyle(ChatFormatting.GRAY), -totalWidth, 2, 0xffffff);
-            renderIcon(pickup, pose, x - 11 - totalWidth, y + 6, time);
+            renderIcon(pickup, pose, -11 - totalWidth, 6, time);
         } else {
             GuiComponent.drawString(pose, font, name, 23 + totalWidth, 2, 0xffffff);
             GuiComponent.drawString(pose, font, total.withStyle(ChatFormatting.GRAY), 5, 2, 0xffffff);
-            renderIcon(pickup, pose, x + 11 + totalWidth, y + 6, time);
+            renderIcon(pickup, pose, 11 + totalWidth, 6, time);
         }
     }
 
+    @SuppressWarnings("all")
     private static void renderIcon(Pickup pickup, PoseStack pose, double x, double y, long time) {
-        RenderSystem.getModelViewStack().translate(x, y, 500);
-        RenderSystem.applyModelViewMatrix();
+        pose.pushPose();
+        pose.translate(x, y, 0);
         pickup.renderIcon(pose, time);
-        RenderSystem.getModelViewStack().translate(-x, -y, -500);
-        RenderSystem.applyModelViewMatrix();
+        pose.popPose();
     }
 
     private static Component getName(String raw, int count) {

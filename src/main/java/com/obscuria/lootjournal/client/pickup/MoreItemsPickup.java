@@ -57,6 +57,6 @@ public class MoreItemsPickup extends Pickup {
         if (stacks.isEmpty()) return;
         final var interval = Math.max(200, 1000 - 50 * stacks.size());
         final var stack = stacks.get((int) (time / interval % stacks.size()));
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(stack, -8, -8);
+        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(pose, stack, -8, -8);
     }
 }

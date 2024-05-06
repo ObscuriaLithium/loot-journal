@@ -1,10 +1,10 @@
 modLoader = "javafml"
-loaderVersion = "[44,)"
+loaderVersion = "[45,)"
 license = "Obscuria Lithium (c) 2024, All Rights Reserved."
 
 [[mods]]
     modId = "loot_journal"
-    version = "3"
+    version = "3.1.0"
     displayName = "Loot Journal"
     credits = "Everyone who supports me on Patreon!"
     authors = "Obscuria"
@@ -18,13 +18,13 @@ license = "Obscuria Lithium (c) 2024, All Rights Reserved."
 [[dependencies.loot_journal]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19.3,)"
+    versionRange = "[1.19.4,)"
     ordering = "NONE"
     side = "CLIENT"
 
 [[dependencies.loot_journal]]
     modId = "forge"
     mandatory = true
-    versionRange = "[44.1.0,)"
+    versionRange = "[45.2.0,)"
     ordering = "NONE"
     side = "CLIENT"
