@@ -36,31 +36,17 @@ public final class Filtering {
     }
 
     private static List<ResourceLocation> tabsWhitelist() {
-        final var result = unwrapIds(LootJournalConfig.tabsWhitelist.get())
+        return unwrapIds(LootJournalConfig.tabsWhitelist.get())
                 .flatMap(Filtering::mapToTab)
                 .flatMap(Filtering::mapToContent)
                 .toList();
-        if (!result.isEmpty()) tryRebuildTabContents();
-        return result;
     }
 
     private static List<ResourceLocation> tabsBlacklist() {
-        final var result = unwrapIds(LootJournalConfig.tabsBlacklist.get())
+        return unwrapIds(LootJournalConfig.tabsBlacklist.get())
                 .flatMap(Filtering::mapToTab)
                 .flatMap(Filtering::mapToContent)
                 .toList();
-        if (!result.isEmpty()) tryRebuildTabContents();
-        return result;
-    }
-
-    @SuppressWarnings("all")
-    private static void tryRebuildTabContents() {
-        final var player = Minecraft.getInstance().player;
-        final var tabs = new CreativeModeTabs();
-        if (player != null
-                && tabs instanceof TabsAccessor accessor
-                && accessor.lootJournal$ShouldRebuild())
-            CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, false, player.level().registryAccess());
     }
 
     private static Stream<ResourceLocation> unwrapIds(List<? extends String> list) {
@@ -73,6 +59,17 @@ public final class Filtering {
     }
 
     private static Stream<ResourceLocation> mapToContent(CreativeModeTab tab) {
+        tryRebuildTabContents();
         return tab.getDisplayItems().stream().map(stack -> ForgeRegistries.ITEMS.getKey(stack.getItem()));
+    }
+
+    @SuppressWarnings("all")
+    private static void tryRebuildTabContents() {
+        final var player = Minecraft.getInstance().player;
+        final var tabs = new CreativeModeTabs();
+        if (player != null
+                && tabs instanceof TabsAccessor accessor
+                && accessor.lootJournal$ShouldRebuild())
+            CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, false, player.level().registryAccess());
     }
 }
