@@ -36,7 +36,6 @@ public final class Filtering {
     }
 
     private static List<ResourceLocation> tabsWhitelist() {
-        tryRebuildTabContents();
         return unwrapIds(LootJournalConfig.tabsWhitelist.get())
                 .flatMap(Filtering::mapToTab)
                 .flatMap(Filtering::mapToContent)
@@ -44,7 +43,6 @@ public final class Filtering {
     }
 
     private static List<ResourceLocation> tabsBlacklist() {
-        tryRebuildTabContents();
         return unwrapIds(LootJournalConfig.tabsBlacklist.get())
                 .flatMap(Filtering::mapToTab)
                 .flatMap(Filtering::mapToContent)
@@ -71,6 +69,7 @@ public final class Filtering {
     }
 
     private static Stream<ResourceLocation> mapToContent(CreativeModeTab tab) {
+        tryRebuildTabContents();
         return tab.getDisplayItems().stream().map(stack -> ForgeRegistries.ITEMS.getKey(stack.getItem()));
     }
 }
