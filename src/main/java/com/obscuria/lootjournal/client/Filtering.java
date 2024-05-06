@@ -36,19 +36,21 @@ public final class Filtering {
     }
 
     private static List<ResourceLocation> tabsWhitelist() {
-        tryRebuildTabContents();
-        return unwrapIds(LootJournalConfig.tabsWhitelist.get())
+        final var result = unwrapIds(LootJournalConfig.tabsWhitelist.get())
                 .flatMap(Filtering::mapToTab)
                 .flatMap(Filtering::mapToContent)
                 .toList();
+        if (!result.isEmpty()) tryRebuildTabContents();
+        return result;
     }
 
     private static List<ResourceLocation> tabsBlacklist() {
-        tryRebuildTabContents();
-        return unwrapIds(LootJournalConfig.tabsBlacklist.get())
+        final var result = unwrapIds(LootJournalConfig.tabsBlacklist.get())
                 .flatMap(Filtering::mapToTab)
                 .flatMap(Filtering::mapToContent)
                 .toList();
+        if (!result.isEmpty()) tryRebuildTabContents();
+        return result;
     }
 
     @SuppressWarnings("all")
