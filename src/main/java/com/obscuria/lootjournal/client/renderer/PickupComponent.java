@@ -2,7 +2,6 @@ package com.obscuria.lootjournal.client.renderer;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.obscuria.lootjournal.LootJournalConfig;
 import com.obscuria.lootjournal.client.Filtering;
 import com.obscuria.lootjournal.client.pickup.ItemPickup;
@@ -10,6 +9,7 @@ import com.obscuria.lootjournal.client.pickup.MoreItemsPickup;
 import com.obscuria.lootjournal.client.pickup.Pickup;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public final class PickupComponent {
         final Player player = Minecraft.getInstance().player;
         if (player != null
                 && player.getId() == playerId
-                && player.level.getEntity(itemId) instanceof ItemEntity entity) {
+                && player.level().getEntity(itemId) instanceof ItemEntity entity) {
             final ItemStack stack = entity.getItem().copy();
             stack.setCount(amount);
             append(stack);
@@ -94,7 +94,7 @@ public final class PickupComponent {
     }
 
     @ApiStatus.Internal
-    public static void render(PoseStack pose) {
+    public static void render(GuiGraphics graphics) {
         final var window = Minecraft.getInstance().getWindow();
         final var capacity = LootJournalConfig.displayCapacity.get();
         final var style = LootJournalConfig.style.get();
@@ -103,7 +103,7 @@ public final class PickupComponent {
         final var originY = anchor.originY(window);
         final var step = anchor.step();
         visiblePickups.removeIf(instance -> {
-            if (instance.render(pose, style, anchor, originX, originY + step * instance.index)) {
+            if (instance.render(graphics, style, anchor, originX, originY + step * instance.index)) {
                 occupiedSlots.remove(instance.index);
                 return true;
             }
@@ -138,7 +138,7 @@ public final class PickupComponent {
             this.index = index;
         }
 
-        boolean render(PoseStack pose, Style style, Anchor anchor, int x, int y) {
+        boolean render(GuiGraphics graphics, Style style, Anchor anchor, int x, int y) {
             final var currentTime = Util.getMillis();
             if (startTime < 0L) {
                 startTime = currentTime;
@@ -149,7 +149,7 @@ public final class PickupComponent {
 
             final var time = currentTime - startTime;
             if (!Minecraft.getInstance().options.hideGui)
-                style.render(pickup, pose, anchor, x, y, factor, time);
+                style.render(pickup, graphics, anchor, x, y, factor, time);
             updateFactor(time);
             return time > getMaxTime();
         }

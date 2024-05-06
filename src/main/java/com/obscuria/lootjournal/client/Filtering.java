@@ -58,7 +58,7 @@ public final class Filtering {
         if (player != null
                 && tabs instanceof TabsAccessor accessor
                 && accessor.lootJournal$ShouldRebuild())
-            CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, false, player.level.registryAccess());
+            CreativeModeTabs.tryRebuildTabContents(FeatureFlags.DEFAULT_FLAGS, false, player.level().registryAccess());
     }
 
     private static Stream<ResourceLocation> unwrapIds(List<? extends String> list) {

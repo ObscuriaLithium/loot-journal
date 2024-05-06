@@ -1,8 +1,8 @@
 package com.obscuria.lootjournal.client.pickup;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.obscuria.lootjournal.LootJournalConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -31,7 +31,7 @@ public class ItemPickup extends Pickup {
     @Override
     public boolean merge(Pickup pickup) {
         if (pickup instanceof ItemPickup other
-                && stack.sameItem(other.stack)
+                && stack.is(other.stack.getItem())
                 && stack.areShareTagsEqual(other.stack)) {
             count += other.count;
             countTotal(other.count);
@@ -59,8 +59,8 @@ public class ItemPickup extends Pickup {
     }
 
     @Override
-    public void renderIcon(PoseStack pose, long time) {
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(pose, stack, -8, -8);
+    public void renderIcon(GuiGraphics graphics, long time) {
+        graphics.renderFakeItem(stack, -8, -8);
     }
 
     private void countTotal(int origin) {
@@ -72,7 +72,7 @@ public class ItemPickup extends Pickup {
 
     private int searchSameItems(ItemStack stack) {
         int searched = 0;
-        if (this.stack.sameItem(stack) && this.stack.areShareTagsEqual(stack))
+        if (this.stack.is(stack.getItem()) && this.stack.areShareTagsEqual(stack))
             searched += stack.getCount();
         //Shulker Box
         if (stack.getItem() == Items.SHULKER_BOX) {

@@ -1,8 +1,7 @@
 package com.obscuria.lootjournal.client.pickup;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -53,10 +52,10 @@ public class MoreItemsPickup extends Pickup {
     }
 
     @Override
-    public void renderIcon(PoseStack pose, long time) {
+    public void renderIcon(GuiGraphics graphics, long time) {
         if (stacks.isEmpty()) return;
         final var interval = Math.max(200, 1000 - 50 * stacks.size());
         final var stack = stacks.get((int) (time / interval % stacks.size()));
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(pose, stack, -8, -8);
+        graphics.renderFakeItem(stack, -8, -8);
     }
 }
