@@ -3,15 +3,15 @@ package com.obscuria.lootjournal.client.pickup;
 import com.obscuria.lootjournal.LootJournalConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @OnlyIn(Dist.CLIENT)
 public class ItemPickup extends Pickup {
@@ -31,8 +31,7 @@ public class ItemPickup extends Pickup {
     @Override
     public boolean merge(Pickup pickup) {
         if (pickup instanceof ItemPickup other
-                && stack.is(other.stack.getItem())
-                && stack.areShareTagsEqual(other.stack)) {
+                && ItemStack.isSameItemSameComponents(stack, other.stack)) {
             count += other.count;
             countTotal(other.count);
             return true;
@@ -45,7 +44,7 @@ public class ItemPickup extends Pickup {
         var name = stack.getHoverName().getString();
         if (name.length() > 24) name = name.substring(0, 23) + "...";
         if (count > 1) name += " x" + count;
-        return Component.literal(name).withStyle(stack.getRarity().getStyleModifier());
+        return Component.literal(name).withStyle(stack.getRarity().color());
     }
 
     @Override
@@ -71,27 +70,11 @@ public class ItemPickup extends Pickup {
     }
 
     private int searchSameItems(ItemStack stack) {
-        int searched = 0;
-        if (this.stack.is(stack.getItem()) && this.stack.areShareTagsEqual(stack))
-            searched += stack.getCount();
-        //Shulker Box
-        if (stack.getItem() == Items.SHULKER_BOX) {
-            final ItemStack shulker = stack.copy();
-            final Tag tag = shulker.getOrCreateTag().getCompound("BlockEntityTag").get("Items");
-            if (tag instanceof ListTag listTag)
-                for (Tag tagIn : listTag.stream().toList())
-                    if (tagIn instanceof CompoundTag compoundTag)
-                        searched += searchSameItems(ItemStack.of(compoundTag));
-        }
-        //Items Tag
-        if (stack.copy().getOrCreateTag().contains("Items")) {
-            final ItemStack container = stack.copy();
-            final Tag tag = container.getOrCreateTag().get("Items");
-            if (tag instanceof ListTag listTag)
-                for (Tag tagIn : listTag.stream().toList())
-                    if (tagIn instanceof CompoundTag compoundTag)
-                        searched += searchSameItems(ItemStack.of(compoundTag));
-        }
-        return searched;
+        final var searched = new AtomicInteger(0);
+        if (ItemStack.isSameItemSameComponents(this.stack, stack))
+            searched.addAndGet(stack.getCount());
+        stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).stream()
+                .forEach(inner -> searched.addAndGet(searchSameItems(inner)));
+        return searched.get();
     }
 }
