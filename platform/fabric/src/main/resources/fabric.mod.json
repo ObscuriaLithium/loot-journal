@@ -1,0 +1,48 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "homepage": "https://www.curseforge.com/minecraft/mc-mods/loot-journal-fabric",
+        "issues": "https://discord.gg/vupzpvZJ"
+    },
+    "license": "${license}",
+    "icon": "${mod_id}.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            "dev.obscuria.lootjournal.fabric.FabricLootJournal"
+        ],
+        "modmenu": [
+            "dev.obscuria.lootjournal.fabric.compat.ModMenuCompat"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json",
+        "${mod_id}.fabric.mixins.json"
+    ],
+    "depends": {
+        "java": ">=${java_version}",
+        "minecraft": "${minecraft_version}",
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric": ">=${fabric_version}",
+        "fabric-api": "*",
+        "cloth-config2": ">=${fabric_config_version}"
+    },
+    "suggests": {
+        "modmenu": "${fabric_modmenu_version}"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "https://discord.gg/jSHHJSUWdY"
+            }
+        }
+    }
+}
+  
