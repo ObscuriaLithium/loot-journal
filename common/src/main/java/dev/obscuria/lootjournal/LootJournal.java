@@ -1,15 +1,16 @@
 package dev.obscuria.lootjournal;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 
 public final class LootJournal
 {
     public static final String MODID = "loot_journal";
     public static final ModConfig CONFIG = new ModConfig();
+    public static boolean shouldRebuildTabs = true;
 
     public static ResourceLocation key(String path)
     {
@@ -29,14 +30,13 @@ public final class LootJournal
 
     private static void tryRebuildTabContents()
     {
+        if (!shouldRebuildTabs) return;
         final var player = Minecraft.getInstance().player;
         if (player == null) return;
-        final var hasPermissions = player.canUseGameMasterBlocks()
-                && Minecraft.getInstance().options.operatorItemsTab().get();
-        CreativeModeTabs.tryRebuildTabContents(
+        shouldRebuildTabs = false;
+        new CreativeModeInventoryScreen(player,
                 player.connection.enabledFeatures(),
-                hasPermissions,
-                player.level().registryAccess());
+                Minecraft.getInstance().options.operatorItemsTab().get());
     }
 
     private static boolean containsAny(CreativeModeTab tab, ItemStack stack)

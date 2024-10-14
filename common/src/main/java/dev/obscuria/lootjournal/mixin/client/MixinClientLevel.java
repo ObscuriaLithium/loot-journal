@@ -1,0 +1,18 @@
+package dev.obscuria.lootjournal.mixin.client;
+
+import dev.obscuria.lootjournal.LootJournal;
+import net.minecraft.client.multiplayer.ClientLevel;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(ClientLevel.class)
+public abstract class MixinClientLevel
+{
+    @Inject(method = "disconnect", at = @At("HEAD"))
+    private void disconnect_Listener(CallbackInfo info)
+    {
+        LootJournal.shouldRebuildTabs = true;
+    }
+}
