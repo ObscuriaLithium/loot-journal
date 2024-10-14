@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly "curse.maven:configured-457570:5441232"
+    //runtimeOnly "curse.maven:configured-457570:5441232"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
