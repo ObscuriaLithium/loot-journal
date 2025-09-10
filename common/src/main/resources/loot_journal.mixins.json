@@ -6,7 +6,6 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [],
     "client": [
-        "client.MixinClientLevel",
         "client.MixinClientPacketListener",
         "client.MixinGameRenderer",
         "client.MixinLocalPlayer"

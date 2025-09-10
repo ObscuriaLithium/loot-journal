@@ -6,8 +6,8 @@ import com.google.common.collect.Queues;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.pickup.ExperiencePickup;
 import dev.obscuria.lootjournal.client.pickup.ItemPickup;
-import dev.obscuria.lootjournal.client.pickup.GroupedItemsPickup;
-import dev.obscuria.lootjournal.client.pickup.IPickup;
+import dev.obscuria.lootjournal.client.pickup.AggregatedPickup;
+import dev.obscuria.lootjournal.client.pickup.IPickupEntry;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,31 +21,31 @@ import java.util.List;
 public final class PickupComponent
 {
     private static final HashMap<Integer, PickupInstance> occupied = Maps.newHashMap();
-    private static final List<PickupInstance> visible = Lists.newArrayList();
-    private static final Deque<IPickup> queued = Queues.newArrayDeque();
+    private static final List<PickupInstance> displayed = Lists.newArrayList();
+    private static final Deque<IPickupEntry> queued = Queues.newArrayDeque();
 
     public static void render(GuiGraphics graphics)
     {
         final var window = Minecraft.getInstance().getWindow();
-        final var maxVisible = LootJournal.CONFIG.maxVisibleNotifications;
-        final var style = LootJournal.CONFIG.style;
-        final var anchor = LootJournal.CONFIG.anchor;
-        final var originX = anchor.originX(window);
-        final var originY = anchor.originY(window);
-        final var step = anchor.step();
 
-        visible.removeIf(instance -> {
-            if (!instance.render(graphics, style, anchor, originX, originY + step * instance.index)) return false;
+        graphics.pose().pushPose();
+        LootJournal.CONFIG.anchor.transform(graphics, window);
+
+        displayed.removeIf(instance -> {
+            if (!instance.render(graphics)) return false;
             occupied.remove(instance.index);
             return true;
         });
 
-        if (queued.isEmpty() || visible.size() >= maxVisible) return;
+        graphics.pose().popPose();
+
+        if (queued.isEmpty() || isAllSlotsOccupied()) return;
+
         queued.removeIf(pickup -> {
-            final var index = findFreeIndex(maxVisible);
+            final var index = findFreeSlot();
             if (index <= -1) return false;
             final var instance = new PickupInstance(pickup, index);
-            visible.add(instance);
+            displayed.add(instance);
             occupied.put(index, instance);
             return true;
         });
@@ -53,6 +53,7 @@ public final class PickupComponent
 
     public static void appendItem(int itemId, int playerId, int amount)
     {
+        if (!LootJournal.CONFIG.itemEntryDisplay) return;
         final var player = Minecraft.getInstance().player;
         if (player == null || player.getId() != playerId) return;
         if (!(player.level().getEntity(itemId) instanceof ItemEntity entity)) return;
@@ -63,109 +64,131 @@ public final class PickupComponent
 
     public static void appendItem(ItemStack stack)
     {
+        if (!LootJournal.CONFIG.itemEntryDisplay) return;
         if (!LootJournal.isAllowed(stack)) return;
-        final var maxVisible = LootJournal.CONFIG.maxVisibleNotifications;
-        final var maxQueued = LootJournal.CONFIG.maxQueuedNotifications;
-        append(visible.size() > maxVisible && queued.size() > maxQueued
-                ? new GroupedItemsPickup(stack)
-                : new ItemPickup(stack));
+        final var shouldAggregate = shouldAggregate();
+        if (shouldAggregate && !LootJournal.CONFIG.aggregatedEntryDisplay) return;
+        append(shouldAggregate ? new AggregatedPickup(stack) : new ItemPickup(stack));
     }
 
     public static void appendExperience(int amount)
     {
-        if (!LootJournal.CONFIG.displayExperience) return;
+        if (!LootJournal.CONFIG.experienceEntryDisplay) return;
         append(new ExperiencePickup(amount));
     }
 
-    private static void append(IPickup pickup)
+    private static void append(IPickupEntry pickup)
     {
-        if (tryMerge(pickup)) return;
-        final var index = findFreeIndex(LootJournal.CONFIG.maxVisibleNotifications);
+        if (maybeMerge(pickup)) return;
+        final var index = findFreeSlot();
+
         if (index > -1)
         {
             final var instance = new PickupInstance(pickup, index);
-            visible.add(instance);
+            displayed.add(instance);
             occupied.put(index, instance);
-        }
-        else if (queued.size() < LootJournal.CONFIG.maxQueuedNotifications)
+        } else if (shouldEnqueue(pickup))
         {
             queued.add(pickup);
         }
     }
 
-    private static boolean tryMerge(IPickup pickup)
+    private static boolean maybeMerge(IPickupEntry pickup)
     {
-        for (var instance : visible)
-            if (instance.tryMerge(pickup))
+        for (var instance : displayed)
+            if (instance.maybeMerge(pickup))
                 return true;
         for (var other : queued)
-            if (other.tryMerge(pickup))
+            if (other.maybeMerge(pickup))
                 return true;
         return false;
     }
 
-    private static int findFreeIndex(int size)
+    private static boolean shouldEnqueue(IPickupEntry pickup)
     {
-        for (var i = 0; i < size; i++)
+        return pickup instanceof AggregatedPickup || queued.size() < LootJournal.CONFIG.queueCapacity;
+    }
+
+    private static int findFreeSlot()
+    {
+        for (var i = 0; i < LootJournal.CONFIG.displayCapacity; i++)
             if (!occupied.containsKey(i))
                 return i;
         return -1;
+    }
+
+    private static boolean isAllSlotsOccupied()
+    {
+        return displayed.size() >= LootJournal.CONFIG.displayCapacity;
+    }
+
+    private static boolean shouldAggregate()
+    {
+        return isAllSlotsOccupied() && queued.size() >= LootJournal.CONFIG.queueCapacity - 1;
     }
 
     private static final class PickupInstance
     {
         private static final long FADE_IN = 750L;
         private static final long FADE_OUT = 1500L;
-        private final IPickup pickup;
+        private final IPickupEntry pickup;
         private long startTime = -1L;
         private long lastTime;
+        private double progress;
         private double delta;
-        private double ratio;
         public int index;
 
-        public PickupInstance(IPickup pickup, int index)
+        public PickupInstance(IPickupEntry pickup, int index)
         {
             this.pickup = pickup;
             this.index = index;
         }
 
-        public boolean render(GuiGraphics graphics, Style style, Anchor anchor, int x, int y)
+        public boolean render(GuiGraphics graphics)
         {
             final var currentTime = Util.getMillis();
+
             if (startTime < 0L)
             {
                 startTime = currentTime;
                 lastTime = currentTime;
             }
+
             delta = (double) (currentTime - lastTime) / 1000.0;
             lastTime = currentTime;
 
             final var time = currentTime - startTime;
+
             if (!Minecraft.getInstance().options.hideGui)
-                style.render(pickup, graphics, anchor, x, y, ratio, time);
-            this.updateRatio(time);
+            {
+                var offset = LootJournal.CONFIG.anchor.getStep() * index;
+                LootJournal.CONFIG.style.render(pickup, graphics, offset, progress, time);
+            }
+
+            this.updateProgress(time);
             return time > getDisplayTime();
         }
 
-        public boolean tryMerge(IPickup other)
+        public boolean maybeMerge(IPickupEntry other)
         {
-            if (pickup.tryMerge(other))
+            if (pickup.maybeMerge(other))
             {
                 startTime = Util.getMillis();
                 return true;
             }
-            return pickup.tryMerge(other);
+
+            return pickup.maybeMerge(other);
         }
 
-        private void updateRatio(long time)
+        private void updateProgress(long time)
         {
-            if (time <= FADE_IN) ratio = Math.min(ratio + delta * 2.0, 1.0);
-            if (time >= getDisplayTime() - FADE_OUT) ratio = Math.max(ratio - delta, 0.0);
+            if (time <= FADE_IN) progress = Math.min(progress + delta * 2.0, 1.0);
+            if (time >= getDisplayTime() - FADE_OUT) progress = Math.max(progress - delta, 0.0);
         }
 
         private long getLifetime()
         {
-            return (long) (1000L * LootJournal.CONFIG.notificationLifetime);
+            return 1000L * LootJournal.CONFIG.lifetime;
         }
 
         private long getDisplayTime()

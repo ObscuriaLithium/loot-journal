@@ -16,8 +16,7 @@ public abstract class MixinClientPacketListener
                     value = "INVOKE",
                     target = "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;Lnet/minecraft/util/thread/BlockableEventLoop;)V",
                     shift = At.Shift.AFTER))
-    public void handleTakeItemEntity_Listener(ClientboundTakeItemEntityPacket packet,
-                                              CallbackInfo info)
+    public void handleTakeItemEntity_Listener(ClientboundTakeItemEntityPacket packet, CallbackInfo info)
     {
         PickupComponent.appendItem(packet.getItemId(), packet.getPlayerId(), packet.getAmount());
     }

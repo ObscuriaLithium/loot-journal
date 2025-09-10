@@ -2,22 +2,24 @@ package dev.obscuria.lootjournal.forge;
 
 import dev.obscuria.lootjournal.ModConfig;
 import dev.obscuria.lootjournal.LootJournal;
-import dev.obscuria.lootjournal.client.DefaultBehavior;
+import dev.obscuria.lootjournal.client.ItemPolicy;
 import dev.obscuria.lootjournal.client.render.Anchor;
-import dev.obscuria.lootjournal.client.render.Style;
+import dev.obscuria.lootjournal.client.render.PickupDrawStyle;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import org.apache.commons.compress.utils.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class ForgeConfig
 {
     private static final ForgeConfigSpec SPEC;
 
-    private static final ForgeConfigSpec.EnumValue<Style> STYLE;
+    private static final ForgeConfigSpec.EnumValue<PickupDrawStyle> STYLE;
     private static final ForgeConfigSpec.BooleanValue USE_RARITY_COLOR;
     private static final ForgeConfigSpec.ConfigValue<String> ITEMS_COLOR;
     private static final ForgeConfigSpec.ConfigValue<String> GROUPED_ITEMS_COLOR;
@@ -32,18 +34,16 @@ public final class ForgeConfig
     private static final ForgeConfigSpec.IntValue MAX_VISIBLE_NOTIFICATIONS;
     private static final ForgeConfigSpec.IntValue MAX_QUEUED_NOTIFICATIONS;
 
-    private static final ForgeConfigSpec.EnumValue<DefaultBehavior> DEFAULT_BEHAVIOR;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TABS_BLACKLIST;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEMS_BLACKLIST;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> TABS_WHITELIST;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEMS_WHITELIST;
+    private static final ForgeConfigSpec.EnumValue<ItemPolicy> DEFAULT_ITEM_POLICY;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_ID_BLACKLIST;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_ID_WHITELIST;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> MOD_ID_BLACKLIST;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> MOD_ID_WHITELIST;
 
     public static void init(IEventBus eventBus)
     {
         eventBus.addListener(ForgeConfig::onUpdate);
-        ModLoadingContext.get().registerConfig(
-                net.minecraftforge.fml.config.ModConfig.Type.CLIENT, SPEC,
-                "obscuria/loot_journal-client.toml");
+        ModLoadingContext.get().registerConfig(Type.CLIENT, SPEC, "obscuria/loot_journal-client.toml");
     }
 
     public static void onUpdate(final ModConfigEvent event)
@@ -57,17 +57,17 @@ public final class ForgeConfig
         LootJournal.CONFIG.displayTotal = DISPLAY_TOTAL.get();
 
         LootJournal.CONFIG.anchor = ANCHOR.get();
-        LootJournal.CONFIG.anchorOffset = ANCHOR_OFFSET.get();
-        LootJournal.CONFIG.notificationSeparation = NOTIFICATION_SEPARATION.get();
-        LootJournal.CONFIG.notificationLifetime = NOTIFICATION_LIFETIME.get();
-        LootJournal.CONFIG.maxVisibleNotifications = MAX_VISIBLE_NOTIFICATIONS.get();
-        LootJournal.CONFIG.maxQueuedNotifications = MAX_QUEUED_NOTIFICATIONS.get();
+        LootJournal.CONFIG.anchorPixelOffset = ANCHOR_OFFSET.get();
+        LootJournal.CONFIG.separation = NOTIFICATION_SEPARATION.get();
+        LootJournal.CONFIG.lifetime = NOTIFICATION_LIFETIME.get();
+        LootJournal.CONFIG.displayCapacity = MAX_VISIBLE_NOTIFICATIONS.get();
+        LootJournal.CONFIG.queueCapacity = MAX_QUEUED_NOTIFICATIONS.get();
 
-        LootJournal.CONFIG.defaultBehavior = DEFAULT_BEHAVIOR.get();
-        LootJournal.CONFIG.tabsBlacklist = ModConfig.mapTabs(TABS_BLACKLIST.get());
-        LootJournal.CONFIG.itemsBlacklist = ModConfig.mapItems(ITEMS_BLACKLIST.get());
-        LootJournal.CONFIG.tabsWhitelist = ModConfig.mapTabs(TABS_WHITELIST.get());
-        LootJournal.CONFIG.itemsWhitelist = ModConfig.mapItems(ITEMS_WHITELIST.get());
+        LootJournal.CONFIG.defaultItemPolicy = DEFAULT_ITEM_POLICY.get();
+        LootJournal.CONFIG.itemIdBlacklist = ModConfig.mapItems(ITEM_ID_BLACKLIST.get());
+        LootJournal.CONFIG.itemIdWhitelist = ModConfig.mapItems(ITEM_ID_WHITELIST.get());
+        LootJournal.CONFIG.modIdBlacklist = new ArrayList<>(MOD_ID_BLACKLIST.get());
+        LootJournal.CONFIG.modIdWhitelist = new ArrayList<>(MOD_ID_WHITELIST.get());
     }
 
     static
@@ -84,7 +84,7 @@ public final class ForgeConfig
         DISPLAY_TOTAL = builder.define("displayTotal", ModConfig.DISPLAY_TOTAL);
         builder.pop();
 
-        builder.push("Positioning");
+        builder.push("Layout");
         ANCHOR = builder.defineEnum("anchor", ModConfig.ANCHOR);
         ANCHOR_OFFSET = builder.defineInRange("anchorOffset", ModConfig.ANCHOR_OFFSET, 0, 256);
         NOTIFICATION_SEPARATION = builder.defineInRange("notificationSeparation", ModConfig.NOTIFICATION_SEPARATION, 0, 16);
@@ -93,12 +93,12 @@ public final class ForgeConfig
         MAX_QUEUED_NOTIFICATIONS = builder.defineInRange("maxQueuedNotifications", ModConfig.MAX_QUEUED_NOTIFICATIONS, 0, 256);
         builder.pop();
 
-        builder.push("Filtering");
-        DEFAULT_BEHAVIOR = builder.defineEnum("defaultBehavior", ModConfig.DEFAULT_BEHAVIOR);
-        TABS_BLACKLIST = builder.defineList("tabsBlacklist", Lists.newArrayList(), it -> it instanceof String);
-        ITEMS_BLACKLIST = builder.defineList("itemsBlacklist", Lists.newArrayList(), it -> it instanceof String);
-        TABS_WHITELIST = builder.defineList("tabsWhitelist", Lists.newArrayList(), it -> it instanceof String);
-        ITEMS_WHITELIST = builder.defineList("itemsWhitelist", Lists.newArrayList(), it -> it instanceof String);
+        builder.push("Filter");
+        DEFAULT_ITEM_POLICY = builder.defineEnum("defaultItemPolicy", ModConfig.DEFAULT_ITEM_POLICY);
+        ITEM_ID_BLACKLIST = builder.defineList("itemIdBlacklist", Lists.newArrayList(), it -> it instanceof String);
+        ITEM_ID_WHITELIST = builder.defineList("itemIdWhitelist", Lists.newArrayList(), it -> it instanceof String);
+        MOD_ID_BLACKLIST = builder.defineList("modIdBlacklist", Lists.newArrayList(), it -> it instanceof String);
+        MOD_ID_WHITELIST = builder.defineList("modIdWhitelist", Lists.newArrayList(), it -> it instanceof String);
         builder.pop();
 
         SPEC = builder.build();

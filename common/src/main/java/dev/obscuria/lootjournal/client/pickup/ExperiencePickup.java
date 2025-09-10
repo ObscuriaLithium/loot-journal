@@ -6,10 +6,9 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
-public final class ExperiencePickup implements IPickup
+public final class ExperiencePickup implements IPickupEntry
 {
     private static final ResourceLocation ICON = LootJournal.key("textures/gui/experience.png");
     private static final long startTime = Util.getMillis();
@@ -18,6 +17,21 @@ public final class ExperiencePickup implements IPickup
     public ExperiencePickup(int amount)
     {
         this.amount = amount;
+    }
+
+    @Override
+    public MutableComponent getDisplayName()
+    {
+        return (amount <= 1
+                ? Component.translatable("pickup.loot_journal.experience_single")
+                : Component.translatable("pickup.loot_journal.experience_multiple", amount))
+                .withStyle(LootJournal.CONFIG.experienceEntryStyle);
+    }
+
+    @Override
+    public int getTotalAmount()
+    {
+        return 0;
     }
 
     @Override
@@ -33,7 +47,7 @@ public final class ExperiencePickup implements IPickup
     }
 
     @Override
-    public boolean tryMerge(IPickup pickup)
+    public boolean maybeMerge(IPickupEntry pickup)
     {
         if (!(pickup instanceof ExperiencePickup other)) return false;
         this.amount += other.amount;
@@ -41,23 +55,8 @@ public final class ExperiencePickup implements IPickup
     }
 
     @Override
-    public MutableComponent getDisplayName()
-    {
-        return (amount <= 1
-                ? Component.translatable("pickup.loot_journal.experience_single")
-                : Component.translatable("pickup.loot_journal.experience_multiple", amount))
-                .withStyle(Style.EMPTY.withColor(LootJournal.CONFIG.experienceColor));
-    }
-
-    @Override
-    public boolean shouldDisplayTotal()
+    public boolean shouldDisplayTotalAmount()
     {
         return false;
-    }
-
-    @Override
-    public int getTotal()
-    {
-        return 0;
     }
 }

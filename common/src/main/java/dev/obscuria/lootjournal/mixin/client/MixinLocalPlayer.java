@@ -14,15 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LocalPlayer.class)
 public abstract class MixinLocalPlayer extends Player
 {
-    private MixinLocalPlayer(Level level, BlockPos pos,
-                             float yaw, GameProfile profile)
+    private MixinLocalPlayer(Level level, BlockPos pos, float yaw, GameProfile profile)
     {
         super(level, pos, yaw, profile);
     }
 
     @Inject(method = "setExperienceValues", at = @At("HEAD"))
-    private void setExperienceValues_Listener(float progress, int total,
-                                              int level, CallbackInfo info)
+    private void setExperienceValues_Listener(float progress, int total, int level, CallbackInfo info)
     {
         if (tickCount < 20) return;
         final var difference = total - this.totalExperience;
