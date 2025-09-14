@@ -64,10 +64,6 @@ processResources {
     from project(":common").sourceSets.main.resources
 }
 
-jar {
-    exclude("LICENSE", "LICENSE_*")
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
