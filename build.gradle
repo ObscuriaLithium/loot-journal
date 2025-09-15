@@ -13,6 +13,7 @@ subprojects {
     java.withJavadocJar()
         
     jar {
+        from(rootProject.file("LICENSE.md"))
         manifest {
             attributes([
                 'Specification-Title'     : mod_name,
