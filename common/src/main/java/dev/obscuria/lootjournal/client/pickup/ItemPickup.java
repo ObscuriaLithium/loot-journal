@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
@@ -29,17 +28,14 @@ public final class ItemPickup implements IPickupEntry
     @Override
     public MutableComponent getDisplayName()
     {
-        Object name = LootJournal.CONFIG.itemEntryUseItemFormatting
-                ? stack.getHoverName().copy().withStyle(Style.EMPTY
-                .withColor(stack.getRarity().color)
-                .withItalic(stack.hasCustomHoverName()))
-                : stack.getHoverName();
+        var style = LootJournal.CONFIG.itemEntryUseItemFormatting
+            ? stack.getDisplayName().getStyle().withItalic(stack.hasCustomHoverName())
+            : LootJournal.CONFIG.itemEntryStyle;
+        var name = stack.getHoverName().copy().withStyle(style);
         final var result = count <= 1
                 ? Component.translatable("pickup.loot_journal.item_single", name)
                 : Component.translatable("pickup.loot_journal.item_multiple", name, count);
-        return LootJournal.CONFIG.itemEntryUseItemFormatting
-                ? result.withStyle(stack.getRarity().color)
-                : result.withStyle(LootJournal.CONFIG.itemEntryStyle);
+        return result.withStyle(style);
     }
 
     @Override
