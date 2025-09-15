@@ -36,7 +36,7 @@ public enum PickupDrawStyle
         final var totalWidth = pickup.shouldDisplayTotalAmount() ? font.width(total) + 5 : 0;
         
         graphics.pose().pushPose();
-        graphics.pose().translate(getX(progress), y, 400);
+        graphics.pose().translate(getX(progress), y, 100);
         RenderSystem.enableBlend();
         renderer.render(pickup, graphics, font, name, font.width(name), total, totalWidth, time);
         RenderSystem.disableBlend();
