@@ -1,0 +1,1 @@
+* Improved the filter editing UI: filter categories now open in separate sub-screens, and filters now support **context-aware auto-completion** based on all items/tags/mods in your modpack. Thanks to **SoraRS** on GitHub for contributing this improvement
