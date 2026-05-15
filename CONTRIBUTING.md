@@ -12,7 +12,7 @@ Got a general question? [Join the Discord](https://discord.gg/jSHHJSUWdY) — it
 
 Check existing issues first to avoid duplicates.
 
-### 1. Bug Report
+### – Bug Report
 
 Use the **Bug Report** template. A useful report includes:
 - What happened and what you expected instead
@@ -22,7 +22,7 @@ Use the **Bug Report** template. A useful report includes:
 
 If the bug only appears with other mods installed, note that — and if you can, test with just this mod to rule out conflicts.
 
-### 2. Crash Report
+### – Crash Report
 
 Use the **Crash Report** template. Crashes are hard to diagnose without logs, so please attach:
 - The crash report from `.minecraft/crash-reports/` (most recent file)
@@ -30,11 +30,11 @@ Use the **Crash Report** template. Crashes are hard to diagnose without logs, so
 
 [mclo.gs](https://mclo.gs) works great for sharing large logs.
 
-### 3. Compatibility Issue
+### – Compatibility Issue
 
 Use the **Compatibility Issue** template. Include the name and version of the conflicting mod, steps to reproduce, and logs. If you can test with just the two mods installed, that helps a lot.
 
-### 4. Feature Request
+### – Feature Request
 
 Use the **Feature Request** template. Describe what you want, why it makes sense for the project, and how it might work. Good suggestions do make it in — no special format needed beyond the template.
 
