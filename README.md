@@ -13,3 +13,7 @@ Loot Journal is a client-side mod that enhances item pickups with smooth, animat
 
 - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/loot-journal)
 - [Modrinth](https://modrinth.com/mod/loot-journal)
+
+---
+
+Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md).
