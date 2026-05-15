@@ -6,7 +6,7 @@ Please take a minute to read the [Obscuria Ecosystem License](LICENSE.md) before
 
 Got a general question? [Join the Discord](https://discord.gg/jSHHJSUWdY) — it's faster than an issue.
 
----
+<br>
 
 ## Reporting a bug
 
@@ -36,7 +36,7 @@ Use the **Compatibility Issue** template. Include the name and version of the co
 
 Use the **Feature Request** template. Describe what you want, why it makes sense for the project, and how it might work. Good suggestions do make it in — no special format needed beyond the template.
 
----
+<br>
 
 ## Submitting a pull request
 
@@ -46,6 +46,6 @@ Use the **Feature Request** template. Describe what you want, why it makes sense
 4. Test your changes in-game before submitting
 5. Write a short description of what changed and why
 
----
+<br>
 
 All contributions fall under the project's [license](LICENSE.md). Rights remain with the original author.
