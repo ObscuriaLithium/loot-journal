@@ -16,7 +16,7 @@ public enum ItemCountResolver {
     GENERIC_CONTAINER {
         @Override
         public int resolve(ItemStack target, ItemStack stack) {
-            @Nullable var container = target.get(DataComponents.CONTAINER);
+            @Nullable var container = stack.get(DataComponents.CONTAINER);
             if (container == null || container == ItemContainerContents.EMPTY) return 0;
             return resolveIterable(target, container.nonEmptyItems());
         }
