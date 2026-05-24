@@ -1,1 +1,0 @@
-* Fixed a stack overflow crash caused by recursive container item resolution

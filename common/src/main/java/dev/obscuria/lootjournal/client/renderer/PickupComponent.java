@@ -12,9 +12,9 @@ import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import dev.obscuria.lootjournal.config.Config;
 import dev.obscuria.lootjournal.config.ConfigCache;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.util.Util;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,15 +30,15 @@ public final class PickupComponent {
         pickupInternal(mapNextEvent(event));
     }
 
-    public static void render(GuiGraphics graphics, DeltaTracker delta) {
-        graphics.pose().pushMatrix();
-        ConfigCache.anchor.transform(graphics);
+    public static void render(GuiGraphicsExtractor extractor, DeltaTracker delta) {
+        extractor.pose().pushMatrix();
+        ConfigCache.anchor.transform(extractor);
 
         updateLayout();
 
         for (int i = 0; i < activeContainers.size(); ) {
             var container = activeContainers.get(i);
-            if (container.render(graphics)) {
+            if (container.render(extractor)) {
                 slots.remove(container.index);
                 activeContainers.remove(i);
             } else {
@@ -46,7 +46,7 @@ public final class PickupComponent {
             }
         }
 
-        graphics.pose().popMatrix();
+        extractor.pose().popMatrix();
 
         if (queuedPickups.isEmpty() || isAllSlotsOccupied()) return;
 
@@ -176,7 +176,7 @@ public final class PickupComponent {
             this.layout = measureLayout();
         }
 
-        public boolean render(GuiGraphics graphics) {
+        public boolean render(GuiGraphicsExtractor extractor) {
             var currentTime = Util.getMillis();
 
             if (virtualStartTime < 0L) {
@@ -194,12 +194,12 @@ public final class PickupComponent {
             updateProgress();
 
             if (!Minecraft.getInstance().options.hideGui) {
-                graphics.pose().pushMatrix();
-                graphics.pose().translate(0f, currentY);
+                extractor.pose().pushMatrix();
+                extractor.pose().translate(0f, currentY);
                 var actualPulse = ConfigCache.pulseEasing.compute((float) pulse) * Config.PULSE_STRENGTH.get().floatValue();
                 var pickupGraphics = new PickupRenderer(this, (float) progress, actualPulse);
-                PickupRenderUtils.render(graphics, pickupGraphics);
-                graphics.pose().popMatrix();
+                PickupRenderUtils.render(extractor, pickupGraphics);
+                extractor.pose().popMatrix();
             }
 
             return time > getDisplayTime();

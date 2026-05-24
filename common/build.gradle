@@ -9,22 +9,15 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
 }
 
 dependencies {
-    // Mixin
-    compileOnly("org.spongepowered:mixin:0.8.5")
-    compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
-    annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
-
-    // Dependencies
-    implementation("dev.obscuria:fragmentum-api:${minecraft_version}-${fragmentum_version}")
-    implementation("dev.isxander:yet-another-config-lib:${yacl_version}+${minecraft_version}-neoforge")
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 }
+
+apply from: 'dependencies.gradle'
 
 configurations {
     commonJava {
@@ -43,7 +36,6 @@ artifacts {
 }
 
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-
 ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
     configurations.named("$variant") {
         attributes {
@@ -60,12 +52,4 @@ sourceSets.configureEach {
             }
         }
     }
-}
-
-tasks.withType(PublishToMavenRepository).configureEach {
-    enabled = false
-}
-
-tasks.withType(PublishToMavenLocal).configureEach {
-    enabled = false
 }

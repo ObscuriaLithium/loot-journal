@@ -1,9 +1,9 @@
 package dev.obscuria.lootjournal.client.registry;
 
 import com.mojang.serialization.MapCodec;
-import dev.obscuria.fragmentum.content.registry.BootstrapContext;
-import dev.obscuria.fragmentum.content.registry.FragmentumRegistry;
-import dev.obscuria.fragmentum.content.registry.Registrar;
+import dev.obscuria.fragmentum.v2.api.common.registry.BootstrapContext;
+import dev.obscuria.fragmentum.v2.api.common.registry.FragmentumRegistry;
+import dev.obscuria.fragmentum.v2.api.common.registry.Registrar;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.themes.Theme;
 import dev.obscuria.lootjournal.client.themes.match.PickupMatch;
@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceKey;
 
 public final class LootJournalRegistries {
 
-    static final Registrar REGISTRAR = FragmentumRegistry.registrar(LootJournal.MODID);
+    static final Registrar REGISTRAR = FragmentumRegistry.registrar(LootJournal.MOD_ID);
 
     public static final Registry<MapCodec<? extends Variable<?>>> THEME_VARIABLE_TYPE = REGISTRAR.createRegistry(Key.THEME_VARIABLE_TYPE);
     public static final Registry<MapCodec<? extends PickupPanel>> PICKUP_PANEL_TYPE = REGISTRAR.createRegistry(Key.PICKUP_PANEL_TYPE);

@@ -14,11 +14,11 @@ public final class FabricLootJournal implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LootJournal.clientInit();
-        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(
                 LootJournal.identifier("pickup_resources"),
                 PickupResourceManager.SHARED);
         HudElementRegistry.attachElementAfter(
-                VanillaHudElements.SUBTITLES,
+                VanillaHudElements.HELD_ITEM_TOOLTIP,
                 LootJournal.identifier("pickup_component"),
                 PickupComponent::render);
     }

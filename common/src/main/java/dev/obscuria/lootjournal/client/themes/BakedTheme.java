@@ -1,7 +1,6 @@
 package dev.obscuria.lootjournal.client.themes;
 
-import dev.obscuria.fragmentum.content.util.color.ARGB;
-import dev.obscuria.fragmentum.content.util.color.Colors;
+import dev.obscuria.fragmentum.v2.api.common.Color;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderUtils;
@@ -85,15 +84,15 @@ public class BakedTheme {
         return (int) cache.computeIfAbsent(name, this::getAsInt);
     }
 
-    public ARGB getCachedARGB(String name) {
-        return (ARGB) cache.computeIfAbsent(name, this::getAsARGB);
+    public Color getCachedColor(String name) {
+        return (Color) cache.computeIfAbsent(name, this::getAsColor);
     }
 
     public boolean getAsBoolean(String optionKey) {
         try {
             return (boolean) variables.get(optionKey).actualValue(this);
         } catch (Exception exception) {
-            LootJournal.LOGGER.warn("Failed to get defaultValue for option {}", optionKey, exception);
+            LootJournal.LOG.warn("Failed to get defaultValue for option {}", optionKey, exception);
             return false;
         }
     }
@@ -102,17 +101,17 @@ public class BakedTheme {
         try {
             return (int) variables.get(optionKey).actualValue(this);
         } catch (Exception exception) {
-            LootJournal.LOGGER.warn("Failed to get defaultValue for option {}", optionKey, exception);
+            LootJournal.LOG.warn("Failed to get defaultValue for option {}", optionKey, exception);
             return 0;
         }
     }
 
-    public ARGB getAsARGB(String optionKey) {
+    public Color getAsColor(String optionKey) {
         try {
-            return (ARGB) variables.get(optionKey).actualValue(this);
+            return (Color) variables.get(optionKey).actualValue(this);
         } catch (Exception exception) {
-            LootJournal.LOGGER.warn("Failed to get defaultValue for option {}", optionKey, exception);
-            return Colors.argbOf("#ffffffff");
+            LootJournal.LOG.warn("Failed to get defaultValue for option {}", optionKey, exception);
+            return Color.WHITE;
         }
     }
 

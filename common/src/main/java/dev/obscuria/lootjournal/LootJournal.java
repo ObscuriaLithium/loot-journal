@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
 
 public final class LootJournal {
 
-    public static final String MODID = "loot_journal";
+    public static final String MOD_ID = "loot_journal";
     public static final String DISPLAY_NAME = "Loot Journal";
-    public static final Logger LOGGER = LoggerFactory.getLogger(DISPLAY_NAME);
+    public static final Logger LOG = LoggerFactory.getLogger(DISPLAY_NAME);
 
     public static Identifier identifier(String name) {
-        return Identifier.fromNamespaceAndPath(MODID, name);
+        return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
 
     public static boolean isAllowed(Player player, ItemStack stack) {

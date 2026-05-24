@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 
 public record TextureBanner(
@@ -27,7 +27,7 @@ public record TextureBanner(
     }
 
     @Override
-    public void render(GuiGraphics graphics, PickupRenderer pickup) {
+    public void render(GuiGraphicsExtractor extractor, PickupRenderer pickup) {
         int x = pickup.isMirrored() ? -(uWidth - pivotX) : -pivotX;
         int y = -pivotY;
 
@@ -42,7 +42,7 @@ public record TextureBanner(
             u1 = tmp;
         }
 
-        graphics.blit(texture, x, y, x + uWidth, y + vHeight, u0, u1, v0, v1);
+        extractor.blit(texture, x, y, x + uWidth, y + vHeight, u0, u1, v0, v1);
     }
 
     static {

@@ -1,6 +1,5 @@
 package dev.obscuria.lootjournal.client.themes.match;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.obscuria.lootjournal.client.events.PickupEvent;

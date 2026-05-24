@@ -1,7 +1,7 @@
 package dev.obscuria.lootjournal.config;
 
-import dev.obscuria.fragmentum.content.util.easing.Easing;
-import dev.obscuria.fragmentum.content.util.easing.EasingFunction;
+import dev.obscuria.fragmentum.v2.api.common.Easing;
+import dev.obscuria.fragmentum.v2.api.common.EasingFunction;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.renderer.GrowthDirection;
 import dev.obscuria.lootjournal.client.renderer.ScreenAnchor;
@@ -42,7 +42,7 @@ public final class ConfigCache {
         try {
             layout = LayoutParser.parse(Config.ELEMENT_ORDER.get());
         } catch (Exception exception) {
-            LootJournal.LOGGER.error("Failed to parse element order: {}", exception.getMessage());
+            LootJournal.LOG.error("Failed to parse element order: {}", exception.getMessage());
             layout = PickupLayout.DEFAULT;
         }
 

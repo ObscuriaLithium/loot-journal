@@ -2,8 +2,8 @@ package dev.obscuria.lootjournal.config;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import dev.obscuria.fragmentum.config.ConfigValue;
-import dev.obscuria.fragmentum.content.util.easing.Easing;
+import dev.obscuria.fragmentum.v2.api.common.Easing;
+import dev.obscuria.fragmentum.v2.api.config.ConfigValue;
 import dev.obscuria.lootjournal.client.DefaultFilterRule;
 import dev.obscuria.lootjournal.client.registry.ThemeRegistry;
 import dev.obscuria.lootjournal.client.renderer.GrowthDirection;
@@ -104,7 +104,8 @@ public final class ConfigBuilder {
 
     private static ConfigCategory buildTrackingCategory() {
         return category("tracking")
-                .option(LabelOption.create(translate("option.tracking.label")
+                .option(LabelOption.create(
+                        translate("option.tracking.label")
                         .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY))))
                 .option(Opts.bool(Config.TRACK_ITEM_PICKUPS))
                 .option(Opts.bool(Config.TRACK_XP_PICKUPS))
@@ -195,7 +196,8 @@ public final class ConfigBuilder {
         return YetAnotherConfigLib.createBuilder()
                 .title(translate("category." + categoryKey))
                 .category(category(categoryKey)
-                        .option(LabelOption.create(translate("option." + categoryKey + ".label")
+                        .option(LabelOption.create(
+                                translate("option." + categoryKey + ".label")
                                 .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY))))
                         .group(blacklist)
                         .group(whitelist)

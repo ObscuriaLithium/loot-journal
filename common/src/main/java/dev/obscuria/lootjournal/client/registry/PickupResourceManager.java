@@ -37,7 +37,7 @@ public class PickupResourceManager implements ResourceManagerReloadListener {
         try {
             kind.loader.load(extractKey(kind, path), JsonParser.parseReader(resource.openAsReader()));
         } catch (Exception exception) {
-            LootJournal.LOGGER.error("Failed to load resource {}: {}", path, exception.getMessage());
+            LootJournal.LOG.error("Failed to load resource {}: {}", path, exception.getMessage());
         }
     }
 

@@ -5,7 +5,7 @@ import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.Nullable;
@@ -22,10 +22,10 @@ public record CountToken() implements LayoutToken {
     }
 
     @Override
-    public void render(GuiGraphics graphics, PickupRenderer renderer, int x) {
+    public void render(GuiGraphicsExtractor extractor, PickupRenderer renderer, int x) {
         var count = renderer.event().count();
         if (count == 0) return;
-        graphics.drawString(
+        extractor.text(
                 Minecraft.getInstance().font,
                 format(count, renderer.style()), x, 3, 0xFFFFFFFF,
                 renderer.style().text().dropShadow().get());
@@ -37,7 +37,7 @@ public record CountToken() implements LayoutToken {
     }
 
     private Component format(int count, @Nullable PickupStyle style) {
-        var color = style == null ? 0xffffff : style.text().pickupCountColor().get().toRGB().decimal();
+        var color = style == null ? 0xffffff : style.text().pickupCountColor().get().rgb();
         var textStyle = Style.EMPTY.withColor(color);
         return Component.literal("x" + LootJournal.abbreviate(count)).withStyle(textStyle);
     }

@@ -1,8 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.obscuria.lootjournal.fabric.mixin",
-  "refmap": "${mod_id}.refmap.json",
+  "package": "dev.obscuria.fragmentum.fabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [],
@@ -10,5 +9,5 @@
   "injectors": {
     "defaultRequire": 1
   }
-  }
+}
   

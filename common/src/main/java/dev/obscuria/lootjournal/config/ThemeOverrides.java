@@ -63,7 +63,7 @@ public final class ThemeOverrides {
                 overrides.put(entry.getKey(), entry.getValue());
             }
         } catch (Exception exception) {
-            LootJournal.LOGGER.error("Failed to load theme overrides: {}", configPath, exception);
+            LootJournal.LOG.error("Failed to load theme overrides: {}", configPath, exception);
         }
     }
 
@@ -79,7 +79,7 @@ public final class ThemeOverrides {
                 GSON.toJson(rootObject, writer);
             }
         } catch (Exception exception) {
-            LootJournal.LOGGER.error("Failed to save theme overrides: {}", configPath, exception);
+            LootJournal.LOG.error("Failed to save theme overrides: {}", configPath, exception);
         }
     }
 

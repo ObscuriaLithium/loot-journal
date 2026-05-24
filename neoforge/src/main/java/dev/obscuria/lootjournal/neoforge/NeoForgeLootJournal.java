@@ -14,7 +14,7 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-@Mod(value = LootJournal.MODID, dist = Dist.CLIENT)
+@Mod(value = LootJournal.MOD_ID, dist = Dist.CLIENT)
 public final class NeoForgeLootJournal {
 
     public NeoForgeLootJournal(IEventBus modBus, ModContainer container) {
@@ -34,7 +34,7 @@ public final class NeoForgeLootJournal {
 
     private static void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(
-                VanillaGuiLayers.SUBTITLE_OVERLAY,
+                VanillaGuiLayers.SELECTED_ITEM_NAME,
                 LootJournal.identifier("pickup_component"),
                 PickupComponent::render);
     }

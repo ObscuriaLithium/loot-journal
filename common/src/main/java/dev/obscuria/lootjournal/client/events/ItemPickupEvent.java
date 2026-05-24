@@ -8,7 +8,7 @@ import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import dev.obscuria.lootjournal.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -46,8 +46,8 @@ public final class ItemPickupEvent implements PickupEvent {
     }
 
     @Override
-    public void renderIcon(GuiGraphics graphics, PickupRenderer renderer) {
-        graphics.renderFakeItem(stack, -8, -8);
+    public void renderIcon(GuiGraphicsExtractor extractor, PickupRenderer renderer) {
+        extractor.fakeItem(stack, -8, -8);
     }
 
     @Override

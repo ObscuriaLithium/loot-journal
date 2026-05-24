@@ -3,7 +3,7 @@ package dev.obscuria.lootjournal.client.renderer.layout.tokens;
 import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public record GapToken(int size) implements LayoutToken {
 
@@ -13,7 +13,7 @@ public record GapToken(int size) implements LayoutToken {
     }
 
     @Override
-    public void render(GuiGraphics graphics, PickupRenderer renderer, int x) {}
+    public void render(GuiGraphicsExtractor extractor, PickupRenderer renderer, int x) {}
 
     @Override
     public String id() {

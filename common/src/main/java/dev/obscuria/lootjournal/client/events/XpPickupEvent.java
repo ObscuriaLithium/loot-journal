@@ -6,7 +6,7 @@ import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -31,10 +31,10 @@ public final class XpPickupEvent implements PickupEvent {
     }
 
     @Override
-    public void renderIcon(GuiGraphics graphics, PickupRenderer renderer) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, ICON, -8, -8, 0, 0, 16, 16, 16, 32);
+    public void renderIcon(GuiGraphicsExtractor extractor, PickupRenderer renderer) {
+        extractor.blit(RenderPipelines.GUI_TEXTURED, ICON, -8, -8, 0, 0, 16, 16, 16, 32);
         var alpha = 0.5f + 0.5f * (float) Math.cos(renderer.timeInSeconds() * 10f);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, ICON, -8, -8, 0, 16, 16, 16, 16, 32, renderer.toARGB(1, 1, 1, alpha));
+        extractor.blit(RenderPipelines.GUI_TEXTURED, ICON, -8, -8, 0, 16, 16, 16, 16, 32, renderer.toARGB(1, 1, 1, alpha));
     }
 
     @Override

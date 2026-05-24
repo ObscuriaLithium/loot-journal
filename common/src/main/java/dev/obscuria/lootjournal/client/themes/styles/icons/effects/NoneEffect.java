@@ -2,7 +2,7 @@ package dev.obscuria.lootjournal.client.themes.styles.icons.effects;
 
 import com.mojang.serialization.MapCodec;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public record NoneEffect() implements IconEffect {
 
@@ -15,5 +15,5 @@ public record NoneEffect() implements IconEffect {
     }
 
     @Override
-    public void render(GuiGraphics graphics, PickupRenderer pickup) {}
+    public void render(GuiGraphicsExtractor extractor, PickupRenderer pickup) {}
 }

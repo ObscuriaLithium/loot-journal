@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.isxander.yacl3.api.Option;
-import dev.obscuria.fragmentum.content.registry.BootstrapContext;
+import dev.obscuria.fragmentum.v2.api.common.registry.BootstrapContext;
 import dev.obscuria.lootjournal.LootJournalCodecs;
 import dev.obscuria.lootjournal.client.registry.LootJournalRegistries;
 import dev.obscuria.lootjournal.client.themes.BakedTheme;

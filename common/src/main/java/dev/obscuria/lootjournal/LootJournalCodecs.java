@@ -37,7 +37,7 @@ public final class LootJournalCodecs {
 
     private static Identifier swapDefaultNamespace(Identifier identifier) {
         return "minecraft".equals(identifier.getNamespace())
-                ? Identifier.fromNamespaceAndPath(LootJournal.MODID, identifier.getPath())
+                ? Identifier.fromNamespaceAndPath(LootJournal.MOD_ID, identifier.getPath())
                 : identifier;
     }
 

@@ -2,12 +2,12 @@ package dev.obscuria.lootjournal.client.themes.styles.icons;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import dev.obscuria.fragmentum.content.registry.BootstrapContext;
+import dev.obscuria.fragmentum.v2.api.common.registry.BootstrapContext;
 import dev.obscuria.lootjournal.LootJournalCodecs;
 import dev.obscuria.lootjournal.client.registry.LootJournalRegistries;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.vars.Var;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.function.Function;
 
@@ -19,7 +19,7 @@ public interface PickupIcon {
 
     MapCodec<? extends PickupIcon> codec();
 
-    void render(GuiGraphics graphics, PickupRenderer renderer);
+    void render(GuiGraphicsExtractor extractor, PickupRenderer renderer);
 
     Var<Integer> paddingLeft();
 

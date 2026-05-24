@@ -1,7 +1,6 @@
 package dev.obscuria.lootjournal.client.renderer;
 
-import dev.obscuria.fragmentum.content.util.color.ARGB;
-import dev.obscuria.fragmentum.content.util.color.Colors;
+import dev.obscuria.fragmentum.v2.api.common.Color;
 import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.layout.LayoutResult;
 import dev.obscuria.lootjournal.client.renderer.layout.PickupLayout;
@@ -15,12 +14,11 @@ import java.util.Deque;
 
 public final class PickupRenderer {
 
-    private static final ARGB WHITE = Colors.argbOf(1, 1, 1, 1);
-    private final Deque<ARGB> colorStack = new ArrayDeque<>();
+    private final Deque<Color> colorStack = new ArrayDeque<>();
     private final PickupComponent.PickupContainer container;
     private final float progress;
     private final float pulse;
-    private ARGB modulate = WHITE;
+    private Color modulate = Color.WHITE;
 
     public PickupRenderer(PickupComponent.PickupContainer container, float progress, float pulse) {
         this.container = container;
@@ -102,12 +100,12 @@ public final class PickupRenderer {
     }
 
     public void pushModulate(float a, float r, float g, float b) {
-        pushModulate(Colors.argbOf(a, r, g, b));
+        pushModulate(Color.components(a, r, g, b));
     }
 
-    public void pushModulate(ARGB modulate) {
+    public void pushModulate(Color modulate) {
         this.colorStack.push(this.modulate);
-        this.modulate = Colors.argbOf(
+        this.modulate = Color.components(
                 this.modulate.alpha() * modulate.alpha(),
                 this.modulate.red() * modulate.red(),
                 this.modulate.green() * modulate.green(),

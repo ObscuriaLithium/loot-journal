@@ -36,12 +36,12 @@ public enum ResourceKind {
         public void load(Identifier key, JsonElement element) {
             final var result = codec.decode(JsonOps.INSTANCE, element);
             result.result().ifPresent(it -> registry.register(key, it.getFirst()));
-            result.error().ifPresent(it -> LootJournal.LOGGER.error("Failed to register {} with key {}: {}", name, key, it.message()));
+            result.error().ifPresent(it -> LootJournal.LOG.error("Failed to register {} with key {}: {}", name, key, it.message()));
         }
 
         public void onReloadEnd() {
             registry.onReloadEnd();
-            LootJournal.LOGGER.info("Loaded {} resources from {}", registry.total(), resourceDir());
+            LootJournal.LOG.info("Loaded {} resources from {}", registry.total(), resourceDir());
         }
     }
 }
