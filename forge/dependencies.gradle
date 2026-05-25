@@ -1,0 +1,4 @@
+dependencies {
+    modImplementation("dev.obscuria:fragmentum-forge:${minecraft_version}-${fragmentum_version}")
+    modImplementation("dev.isxander:yet-another-config-lib:${yacl_version}+${minecraft_version}-forge")
+}

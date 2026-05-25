@@ -1,0 +1,4 @@
+dependencies {
+    modApi("dev.obscuria:fragmentum-api:${minecraft_version}-${fragmentum_version}")
+    modApi("dev.isxander:yet-another-config-lib:${yacl_version}+${minecraft_version}-forge")
+}
