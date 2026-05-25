@@ -52,40 +52,19 @@ repositories {
         url = "https://cursemaven.com"
     }
     maven {
-        name 'Xander Maven'
-        url 'https://maven.isxander.dev/releases'
+        // Yet Another Config Lib
+        name = 'Xander Maven'
+        url = 'https://maven.isxander.dev/releases'
     }
     maven {
-        name = "TerraformersMC"
-        url = 'https://maven.terraformersmc.com/releases/'
-    }
-    maven {
-        name = "Progwml6's maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name = "BlameJared"
-        url = 'https://maven.blamejared.com'
-    }
-    maven {
-        name = "Ladysnake Libs"
-        url = 'https://maven.ladysnake.org/releases'
-    }
-    maven {
+        // Forge Config API Port
         name = "Fuzs Mod Resources"
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
     }
     maven {
-        name = "Illusive Soulworks maven"
-        url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-        content {
-            includeGroupByRegex("software\\.bernie.*")
-            includeGroup("com.eliotlash.mclib")
-        }
+        // Mod Menu
+        name = "TerraformersMC"
+        url = 'https://maven.terraformersmc.com/releases/'
     }
 }
 
@@ -94,6 +73,8 @@ dependencies {
     implementation("com.google.code.findbugs:jsr305:3.0.1")
     compileOnly("org.checkerframework:checker-qual:3.43.0")
     annotationProcessor("org.checkerframework:checker:3.43.0")
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 }
 
 // Declare capabilities on the outgoing configurations.
