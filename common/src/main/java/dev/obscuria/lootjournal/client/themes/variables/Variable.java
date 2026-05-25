@@ -44,7 +44,7 @@ public interface Variable<T> {
     static <T> Option.Builder<T> createOption(Variable<?> variable) {
         return Option.<T>createBuilder()
                 .name(Component.translatable(variable.displayName()))
-                .description(ConfigBuilder.Opts.description(Component.translatable(variable.description())));
+                .description(ConfigBuilder.Opts.descriptionOf(Component.translatable(variable.description())));
     }
 
     static void bootstrap(BootstrapContext<Codec<? extends Variable<?>>> context) {
