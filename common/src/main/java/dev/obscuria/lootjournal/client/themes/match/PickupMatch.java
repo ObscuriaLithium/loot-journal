@@ -2,7 +2,7 @@ package dev.obscuria.lootjournal.client.themes.match;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import dev.obscuria.fragmentum.v2.api.common.registry.BootstrapContext;
+import dev.obscuria.fragmentum.content.registry.BootstrapContext;
 import dev.obscuria.lootjournal.LootJournalCodecs;
 import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.registry.CompactDispatchCodec;

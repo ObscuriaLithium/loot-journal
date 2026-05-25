@@ -4,7 +4,7 @@ import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
@@ -18,14 +18,14 @@ public record NameToken() implements LayoutToken {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer renderer, int x) {
-        var color = renderer.style().text().nameColor().get().rgb();
+    public void render(GuiGraphics graphics, PickupRenderer renderer, int x) {
+        var color = renderer.style().text().nameColor().get().toRGB().decimal();
         var text = Component.empty()
                 .append(renderer.event().displayName())
                 .withStyle(Style.EMPTY.withColor(color));
-        extractor.text(
+        graphics.drawString(
                 Minecraft.getInstance().font,
-                text, x, 3, 0xFFFFFFFF,
+                text, x, 3, 0xFFFFFF,
                 renderer.style().text().dropShadow().get());
     }
 

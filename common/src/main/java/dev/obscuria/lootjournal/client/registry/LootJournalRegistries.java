@@ -1,9 +1,10 @@
 package dev.obscuria.lootjournal.client.registry;
 
 import com.mojang.serialization.MapCodec;
-import dev.obscuria.fragmentum.v2.api.common.registry.BootstrapContext;
-import dev.obscuria.fragmentum.v2.api.common.registry.FragmentumRegistry;
-import dev.obscuria.fragmentum.v2.api.common.registry.Registrar;
+import dev.obscuria.fragmentum.content.registry.BootstrapContext;
+import dev.obscuria.fragmentum.content.registry.DelegatedRegistry;
+import dev.obscuria.fragmentum.content.registry.FragmentumRegistry;
+import dev.obscuria.fragmentum.content.registry.Registrar;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.themes.Theme;
 import dev.obscuria.lootjournal.client.themes.match.PickupMatch;
@@ -16,43 +17,44 @@ import dev.obscuria.lootjournal.client.themes.variables.Variable;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
-public final class LootJournalRegistries {
+public interface LootJournalRegistries {
 
-    static final Registrar REGISTRAR = FragmentumRegistry.registrar(LootJournal.MOD_ID);
+    Registrar REGISTRAR = FragmentumRegistry.registrar(LootJournal.MOD_ID);
 
-    public static final Registry<MapCodec<? extends Variable<?>>> THEME_VARIABLE_TYPE = REGISTRAR.createRegistry(Key.THEME_VARIABLE_TYPE);
-    public static final Registry<MapCodec<? extends PickupPanel>> PICKUP_PANEL_TYPE = REGISTRAR.createRegistry(Key.PICKUP_PANEL_TYPE);
-    public static final Registry<MapCodec<? extends PickupBanner>> PICKUP_BANNER_TYPE = REGISTRAR.createRegistry(Key.PICKUP_BANNER_TYPE);
-    public static final Registry<MapCodec<? extends PickupIcon>> PICKUP_ICON_TYPE = REGISTRAR.createRegistry(Key.PICKUP_ICON_TYPE);
-    public static final Registry<MapCodec<? extends PickupMatch>> PICKUP_MATCH_TYPE = REGISTRAR.createRegistry(Key.PICKUP_MATCH_TYPE);
-    public static final Registry<MapCodec<? extends IconEffect>> ICON_EFFECT_TYPE = REGISTRAR.createRegistry(Key.ICON_EFFECT_TYPE);
+    DelegatedRegistry<MapCodec<? extends Variable<?>>> THEME_VARIABLE_TYPE = REGISTRAR.createRegistry(Key.THEME_VARIABLE_TYPE);
+    DelegatedRegistry<MapCodec<? extends PickupPanel>> PICKUP_PANEL_TYPE = REGISTRAR.createRegistry(Key.PICKUP_PANEL_TYPE);
+    DelegatedRegistry<MapCodec<? extends PickupBanner>> PICKUP_BANNER_TYPE = REGISTRAR.createRegistry(Key.PICKUP_BANNER_TYPE);
+    DelegatedRegistry<MapCodec<? extends PickupIcon>> PICKUP_ICON_TYPE = REGISTRAR.createRegistry(Key.PICKUP_ICON_TYPE);
+    DelegatedRegistry<MapCodec<? extends PickupMatch>> PICKUP_MATCH_TYPE = REGISTRAR.createRegistry(Key.PICKUP_MATCH_TYPE);
+    DelegatedRegistry<MapCodec<? extends IconEffect>> ICON_EFFECT_TYPE = REGISTRAR.createRegistry(Key.ICON_EFFECT_TYPE);
 
-    public static final class Resource {
+    interface Resource {
 
-        public static final ResourceRegistry<PickupStyle> PICKUP_STYLE = new ResourceRegistry<>("style");
-        public static final ResourceRegistry<Theme> THEME = new ResourceRegistry<>("theme");
+        ResourceRegistry<PickupStyle> PICKUP_STYLE = new ResourceRegistry<>("style");
+        ResourceRegistry<Theme> THEME = new ResourceRegistry<>("theme");
     }
 
-    public static final class Key {
+    interface Key {
 
-        public static final ResourceKey<Registry<MapCodec<? extends Variable<?>>>> THEME_VARIABLE_TYPE = create("theme_variable_type");
-        public static final ResourceKey<Registry<MapCodec<? extends PickupPanel>>> PICKUP_PANEL_TYPE = create("pickup_panel_type");
-        public static final ResourceKey<Registry<MapCodec<? extends PickupBanner>>> PICKUP_BANNER_TYPE = create("pickup_banner_type");
-        public static final ResourceKey<Registry<MapCodec<? extends PickupIcon>>> PICKUP_ICON_TYPE = create("pickup_icon_type");
-        public static final ResourceKey<Registry<MapCodec<? extends PickupMatch>>> PICKUP_MATCH_TYPE = create("pickup_match_type");
-        public static final ResourceKey<Registry<MapCodec<? extends IconEffect>>> ICON_EFFECT_TYPE = create("icon_effect_type");
+        ResourceKey<Registry<MapCodec<? extends Variable<?>>>> THEME_VARIABLE_TYPE = create("theme_variable_type");
+        ResourceKey<Registry<MapCodec<? extends PickupPanel>>> PICKUP_PANEL_TYPE = create("pickup_panel_type");
+        ResourceKey<Registry<MapCodec<? extends PickupBanner>>> PICKUP_BANNER_TYPE = create("pickup_banner_type");
+        ResourceKey<Registry<MapCodec<? extends PickupIcon>>> PICKUP_ICON_TYPE = create("pickup_icon_type");
+        ResourceKey<Registry<MapCodec<? extends PickupMatch>>> PICKUP_MATCH_TYPE = create("pickup_match_type");
+        ResourceKey<Registry<MapCodec<? extends IconEffect>>> ICON_EFFECT_TYPE = create("icon_effect_type");
 
         private static <T> ResourceKey<Registry<T>> create(String name) {
-            return ResourceKey.createRegistryKey(LootJournal.identifier(name));
+            return ResourceKey.createRegistryKey(LootJournal.id(name));
         }
     }
 
-    public static void init() {
-        Variable.bootstrap(BootstrapContext.create(REGISTRAR, Key.THEME_VARIABLE_TYPE, LootJournal::identifier));
-        PickupPanel.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_PANEL_TYPE, LootJournal::identifier));
-        PickupBanner.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_BANNER_TYPE, LootJournal::identifier));
-        PickupIcon.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_ICON_TYPE, LootJournal::identifier));
-        PickupMatch.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_MATCH_TYPE, LootJournal::identifier));
-        IconEffect.bootstrap(BootstrapContext.create(REGISTRAR, Key.ICON_EFFECT_TYPE, LootJournal::identifier));
+    static void init() {
+
+        Variable.bootstrap(BootstrapContext.create(REGISTRAR, Key.THEME_VARIABLE_TYPE, LootJournal::id));
+        PickupPanel.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_PANEL_TYPE, LootJournal::id));
+        PickupBanner.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_BANNER_TYPE, LootJournal::id));
+        PickupIcon.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_ICON_TYPE, LootJournal::id));
+        PickupMatch.bootstrap(BootstrapContext.create(REGISTRAR, Key.PICKUP_MATCH_TYPE, LootJournal::id));
+        IconEffect.bootstrap(BootstrapContext.create(REGISTRAR, Key.ICON_EFFECT_TYPE, LootJournal::id));
     }
 }

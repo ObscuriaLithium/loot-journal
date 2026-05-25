@@ -6,7 +6,7 @@ import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.icons.effects.IconEffect;
 import dev.obscuria.lootjournal.client.themes.styles.icons.effects.NoneEffect;
 import dev.obscuria.lootjournal.client.themes.styles.vars.Var;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 
 public record SimpleIcon(
         Var<Integer> xOffset,
@@ -25,9 +25,9 @@ public record SimpleIcon(
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer renderer) {
-        effect.render(extractor, renderer);
-        renderer.event().renderIcon(extractor, renderer);
+    public void render(GuiGraphics graphics, PickupRenderer renderer) {
+        effect.render(graphics, renderer);
+        renderer.event().renderIcon(graphics, renderer);
     }
 
     static {

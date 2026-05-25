@@ -10,7 +10,7 @@ public enum ItemStackSource {
     INVENTORY {
         @Override
         public void forEach(Player player, Consumer<ItemStack> consumer) {
-            player.getInventory().forEach(consumer);
+            player.getInventory().items.forEach(consumer);
         }
     },
     CURIOS {

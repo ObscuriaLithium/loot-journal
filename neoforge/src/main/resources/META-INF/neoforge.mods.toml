@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "${mod_name}"
 displayURL = "${curseforge_neoforge}"
 logoFile = "${mod_id}.png"
-credits = "${credits}"
+credits = ""
 authors = "${mod_author}"
 description = '''${description}'''
 updateJSONURL = "${update_lookup}"
@@ -23,21 +23,21 @@ config = "${mod_id}.neoforge.mixins.json"
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
-type = "required"
+mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"
-type = "required"
+mandatory = true
 versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "fragmentum"
-type = "required"
+mandatory = true
 versionRange = "[${fragmentum_version},)"
 ordering = "NONE"
-side = "CLIENT"
+side = "BOTH"

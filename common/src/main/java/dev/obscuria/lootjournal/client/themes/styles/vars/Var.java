@@ -1,7 +1,7 @@
 package dev.obscuria.lootjournal.client.themes.styles.vars;
 
 import com.mojang.serialization.Codec;
-import dev.obscuria.fragmentum.v2.api.common.Color;
+import dev.obscuria.fragmentum.content.util.color.ARGB;
 import dev.obscuria.lootjournal.client.registry.ThemeRegistry;
 
 public interface Var<T> {
@@ -10,7 +10,7 @@ public interface Var<T> {
     Codec<Var<Float>> FLOAT = VarType.FLOAT.codec();
     Codec<Var<Boolean>> BOOL = VarType.BOOL.codec();
     Codec<Var<String>> STRING = VarType.STRING.codec();
-    Codec<Var<Color>> COLOR = VarType.COLOR.codec();
+    Codec<Var<ARGB>> ARGB = VarType.COLOR_ARGB.codec();
 
     T get();
 

@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 
 public record TextureBanner(
-        Identifier texture,
+        ResourceLocation texture,
         int textureWidth,
         int textureHeight,
         int uOffset,
@@ -27,27 +27,29 @@ public record TextureBanner(
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer pickup) {
-        int x = pickup.isMirrored() ? -(uWidth - pivotX) : -pivotX;
-        int y = -pivotY;
+    public void render(GuiGraphics graphics, PickupRenderer pickup) {
 
-        float u0 = (float) uOffset / textureWidth;
-        float u1 = (float)(uOffset + uWidth) / textureWidth;
-        float v0 = (float) vOffset / textureHeight;
-        float v1 = (float)(vOffset + vHeight) / textureHeight;
+        int x;
+        int u;
+        int w;
 
         if (pickup.isMirrored()) {
-            float tmp = u0;
-            u0 = u1;
-            u1 = tmp;
+            x = -(uWidth - pivotX);
+            u = uOffset + uWidth;
+            w = -uWidth;
+        } else {
+            x = -pivotX;
+            u = uOffset;
+            w = uWidth;
         }
 
-        extractor.blit(texture, x, y, x + uWidth, y + vHeight, u0, u1, v0, v1);
+        int y = -pivotY;
+        graphics.blit(texture, x, y, uWidth, vHeight, u, vOffset, w, vHeight, textureWidth, textureHeight);
     }
 
     static {
         CODEC = RecordCodecBuilder.mapCodec(codec -> codec.group(
-                Identifier.CODEC.fieldOf("texture").forGetter(TextureBanner::texture),
+                ResourceLocation.CODEC.fieldOf("texture").forGetter(TextureBanner::texture),
                 Codec.INT.fieldOf("texture_width").forGetter(TextureBanner::textureWidth),
                 Codec.INT.fieldOf("texture_height").forGetter(TextureBanner::textureHeight),
                 Codec.INT.fieldOf("u_offset").forGetter(TextureBanner::uOffset),

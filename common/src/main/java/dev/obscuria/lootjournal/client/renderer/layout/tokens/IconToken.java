@@ -4,7 +4,7 @@ import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderUtils;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 
 public record IconToken() implements LayoutToken {
 
@@ -19,21 +19,21 @@ public record IconToken() implements LayoutToken {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer renderer, int x) {
+    public void render(GuiGraphics graphics, PickupRenderer renderer, int x) {
 
-        float scale = 1f + renderer.pulse() * 0.2f;
+        var scale = 1f + renderer.pulse() * 0.2f;
         int padding = renderer.isMirrored()
                 ? renderer.style().icon().paddingRight().get()
                 : renderer.style().icon().paddingLeft().get();
-        float pivotX = x + padding + ICON_SIZE * 0.5f;
-        float pivotY = PickupRenderUtils.PICKUP_HEIGHT * 0.5f;
+        var pivotX = x + padding + ICON_SIZE * 0.5;
+        var pivotY = PickupRenderUtils.PICKUP_HEIGHT * 0.5;
 
-        extractor.pose().pushMatrix();
-        extractor.pose().translate(pivotX, pivotY);
-        extractor.pose().translate(0, -4 * renderer.pulse());
-        extractor.pose().scale(scale, scale);
-        renderer.style().icon().render(extractor, renderer);
-        extractor.pose().popMatrix();
+        graphics.pose().pushPose();
+        graphics.pose().translate(pivotX, pivotY, 0);
+        graphics.pose().translate(0, -4 * renderer.pulse(), 0);
+        graphics.pose().scale(scale, scale, 1);
+        renderer.style().icon().render(graphics, renderer);
+        graphics.pose().popPose();
     }
 
     @Override

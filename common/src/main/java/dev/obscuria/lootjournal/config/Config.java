@@ -1,8 +1,8 @@
 package dev.obscuria.lootjournal.config;
 
-import dev.obscuria.fragmentum.v2.api.common.Easing;
-import dev.obscuria.fragmentum.v2.api.config.ConfigBuilder;
-import dev.obscuria.fragmentum.v2.api.config.ConfigValue;
+import dev.obscuria.fragmentum.config.ConfigBuilder;
+import dev.obscuria.fragmentum.config.ConfigValue;
+import dev.obscuria.fragmentum.content.util.easing.Easing;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.DefaultFilterRule;
 import dev.obscuria.lootjournal.client.renderer.GrowthDirection;
@@ -78,7 +78,7 @@ public final class Config {
     public static void init() {}
 
     static {
-        final var builder = ConfigBuilder.create("obscuria/loot_journal-client.toml");
+        final var builder = new ConfigBuilder("obscuria/loot_journal-client.toml");
 
         builder.comment(
                 "===========[ Loot Journal Client Config ]===========",
@@ -127,7 +127,7 @@ public final class Config {
         TRACK_ITEM_PICKUPS = builder.defineBoolean("trackItemPickups", false);
         TRACK_XP_PICKUPS = builder.defineBoolean("trackXpPickups", false);
         ENABLE_PLAYER_FILTERING = builder.defineBoolean("enablePlayerFiltering", false);
-        PLAYER_WHITELIST = builder.defineList("playerWhitelist", new ArrayList<>(), () -> "Notch");
+        PLAYER_WHITELIST = builder.defineList("playerWhitelist", new ArrayList<>(), () -> "");
 
         ENABLE_SOUNDS = builder.defineBoolean("enableSounds", true);
         SOUND_ID = builder.defineString("soundId", "minecraft:entity.item.pickup");
@@ -138,13 +138,14 @@ public final class Config {
         HIDE_YOUR_COMMON_ITEMS = builder.defineBoolean("hideYourCommonItems", false);
         HIDE_OTHER_COMMON_ITEMS = builder.defineBoolean("hideOtherCommonItems", false);
         DEFAULT_FILTER_RULE = builder.DefineEnum("defaultFilterRule", DefaultFilterRule.ALLOW_ALL);
-        ITEM_ID_BLACKLIST = builder.defineList("itemIdBlacklist", new ArrayList<>(), () -> "minecraft:apple");
-        ITEM_ID_WHITELIST = builder.defineList("itemIdWhitelist", new ArrayList<>(), () -> "minecraft:apple");
-        ITEM_TAG_BLACKLIST = builder.defineList("itemTagBlacklist", new ArrayList<>(), () -> "minecraft:music_discs");
-        ITEM_TAG_WHITELIST = builder.defineList("itemTagWhitelist", new ArrayList<>(), () -> "minecraft:music_discs");
-        MOD_ID_BLACKLIST = builder.defineList("modIdBlacklist", new ArrayList<>(), () -> "mod_id");
-        MOD_ID_WHITELIST = builder.defineList("modIdWhitelist", new ArrayList<>(), () -> "mod_id");
+        ITEM_ID_BLACKLIST = builder.defineList("itemIdBlacklist", new ArrayList<>(), () -> "");
+        ITEM_ID_WHITELIST = builder.defineList("itemIdWhitelist", new ArrayList<>(), () -> "");
+        ITEM_TAG_BLACKLIST = builder.defineList("itemTagBlacklist", new ArrayList<>(), () -> "");
+        ITEM_TAG_WHITELIST = builder.defineList("itemTagWhitelist", new ArrayList<>(), () -> "");
+        MOD_ID_BLACKLIST = builder.defineList("modIdBlacklist", new ArrayList<>(), () -> "");
+        MOD_ID_WHITELIST = builder.defineList("modIdWhitelist", new ArrayList<>(), () -> "");
 
-        VALUES = builder.buildClient(LootJournal.MOD_ID);
+        builder.buildClient(LootJournal.MOD_ID);
+        VALUES = builder.collectValues();
     }
 }

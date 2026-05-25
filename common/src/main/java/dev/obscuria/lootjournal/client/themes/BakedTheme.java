@@ -1,6 +1,7 @@
 package dev.obscuria.lootjournal.client.themes;
 
-import dev.obscuria.fragmentum.v2.api.common.Color;
+import dev.obscuria.fragmentum.content.util.color.ARGB;
+import dev.obscuria.fragmentum.content.util.color.Colors;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderUtils;
@@ -84,8 +85,8 @@ public class BakedTheme {
         return (int) cache.computeIfAbsent(name, this::getAsInt);
     }
 
-    public Color getCachedColor(String name) {
-        return (Color) cache.computeIfAbsent(name, this::getAsColor);
+    public ARGB getCachedARGB(String name) {
+        return (ARGB) cache.computeIfAbsent(name, this::getAsARGB);
     }
 
     public boolean getAsBoolean(String optionKey) {
@@ -106,12 +107,12 @@ public class BakedTheme {
         }
     }
 
-    public Color getAsColor(String optionKey) {
+    public ARGB getAsARGB(String optionKey) {
         try {
-            return (Color) variables.get(optionKey).actualValue(this);
+            return (ARGB) variables.get(optionKey).actualValue(this);
         } catch (Exception exception) {
             LootJournal.LOG.warn("Failed to get defaultValue for option {}", optionKey, exception);
-            return Color.WHITE;
+            return Colors.argbOf("#ffffffff");
         }
     }
 

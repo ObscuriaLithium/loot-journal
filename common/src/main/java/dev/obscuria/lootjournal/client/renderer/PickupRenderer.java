@@ -1,24 +1,27 @@
 package dev.obscuria.lootjournal.client.renderer;
 
-import dev.obscuria.fragmentum.v2.api.common.Color;
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.obscuria.fragmentum.content.util.color.ARGB;
+import dev.obscuria.fragmentum.content.util.color.Colors;
 import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.layout.LayoutResult;
 import dev.obscuria.lootjournal.client.renderer.layout.PickupLayout;
 import dev.obscuria.lootjournal.client.themes.BakedTheme;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import dev.obscuria.lootjournal.config.ConfigCache;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 public final class PickupRenderer {
 
-    private final Deque<Color> colorStack = new ArrayDeque<>();
+    private static final ARGB WHITE = Colors.argbOf(1, 1, 1, 1);
+    private final Deque<ARGB> colorStack = new ArrayDeque<>();
     private final PickupComponent.PickupContainer container;
     private final float progress;
     private final float pulse;
-    private Color modulate = Color.WHITE;
+    private ARGB modulate = WHITE;
 
     public PickupRenderer(PickupComponent.PickupContainer container, float progress, float pulse) {
         this.container = container;
@@ -100,16 +103,17 @@ public final class PickupRenderer {
     }
 
     public void pushModulate(float a, float r, float g, float b) {
-        pushModulate(Color.components(a, r, g, b));
+        pushModulate(Colors.argbOf(a, r, g, b));
     }
 
-    public void pushModulate(Color modulate) {
+    public void pushModulate(ARGB modulate) {
         this.colorStack.push(this.modulate);
-        this.modulate = Color.components(
+        this.modulate = Colors.argbOf(
                 this.modulate.alpha() * modulate.alpha(),
                 this.modulate.red() * modulate.red(),
                 this.modulate.green() * modulate.green(),
                 this.modulate.blue() * modulate.blue());
+        applyModulate();
     }
 
     public void popModulate() {
@@ -117,17 +121,14 @@ public final class PickupRenderer {
             throw new IllegalStateException("Color stack underflow");
         }
         modulate = colorStack.pop();
+        applyModulate();
     }
 
     public float timeInSeconds() {
         return (Util.getMillis() - container.startTime) * 0.001f;
     }
 
-    public int toARGB(float r, float g, float b, float a) {
-        int ai = (int)(a * 255f + 0.5f) & 0xFF;
-        int ri = (int)(r * 255f + 0.5f) & 0xFF;
-        int gi = (int)(g * 255f + 0.5f) & 0xFF;
-        int bi = (int)(b * 255f + 0.5f) & 0xFF;
-        return (ai << 24) | (ri << 16) | (gi << 8) | bi;
+    private void applyModulate() {
+        RenderSystem.setShaderColor(modulate.red(), modulate.green(), modulate.blue(), modulate.alpha());
     }
 }

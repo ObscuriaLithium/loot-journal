@@ -2,8 +2,8 @@ package dev.obscuria.lootjournal.config;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import dev.obscuria.fragmentum.v2.api.common.Easing;
-import dev.obscuria.fragmentum.v2.api.config.ConfigValue;
+import dev.obscuria.fragmentum.config.ConfigValue;
+import dev.obscuria.fragmentum.content.util.easing.Easing;
 import dev.obscuria.lootjournal.client.DefaultFilterRule;
 import dev.obscuria.lootjournal.client.registry.ThemeRegistry;
 import dev.obscuria.lootjournal.client.renderer.GrowthDirection;
@@ -20,8 +20,9 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,7 +107,7 @@ public final class ConfigBuilder {
         return category("tracking")
                 .option(LabelOption.create(
                         translate("option.tracking.label")
-                        .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY))))
+                                .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY))))
                 .option(Opts.bool(Config.TRACK_ITEM_PICKUPS))
                 .option(Opts.bool(Config.TRACK_XP_PICKUPS))
                 .option(Opts.bool(Config.ENABLE_PLAYER_FILTERING))
@@ -198,7 +199,7 @@ public final class ConfigBuilder {
                 .category(category(categoryKey)
                         .option(LabelOption.create(
                                 translate("option." + categoryKey + ".label")
-                                .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY))))
+                                        .withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY))))
                         .group(blacklist)
                         .group(whitelist)
                         .build())
@@ -295,8 +296,8 @@ public final class ConfigBuilder {
             return base(value)
                     .controller(o -> DropdownStringControllerBuilder.create(o)
                             .values(BuiltInRegistries.SOUND_EVENT.stream()
-                                    .map(SoundEvent::location)
-                                    .map(Identifier::toString)
+                                    .map(SoundEvent::getLocation)
+                                    .map(ResourceLocation::toString)
                                     .toList()))
                     .build();
         }
@@ -313,22 +314,22 @@ public final class ConfigBuilder {
 
         static ListOption<String> itemIdList(ConfigValue<List<? extends String>> value) {
             return dropdownList(value, () -> BuiltInRegistries.ITEM.keySet().stream()
-                    .map(Identifier::toString)
+                    .map(ResourceLocation::toString)
                     .sorted()
                     .toList());
         }
 
         static ListOption<String> itemTagList(ConfigValue<List<? extends String>> value) {
-            return dropdownList(value, () -> BuiltInRegistries.ITEM.getTags()
-                    .map(named -> named.key().location())
-                    .map(Identifier::toString)
+            return dropdownList(value, () -> BuiltInRegistries.ITEM.getTagNames()
+                    .map(TagKey::location)
+                    .map(ResourceLocation::toString)
                     .sorted()
                     .toList());
         }
 
         static ListOption<String> modIdList(ConfigValue<List<? extends String>> value) {
             return dropdownList(value, () -> BuiltInRegistries.ITEM.keySet().stream()
-                    .map(Identifier::getNamespace)
+                    .map(ResourceLocation::getNamespace)
                     .distinct()
                     .sorted()
                     .toList());

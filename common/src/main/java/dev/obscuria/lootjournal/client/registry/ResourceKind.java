@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import dev.obscuria.lootjournal.LootJournal;
 import dev.obscuria.lootjournal.client.themes.Theme;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public enum ResourceKind {
 
@@ -33,7 +33,7 @@ public enum ResourceKind {
             registry.onReloadStart();
         }
 
-        public void load(Identifier key, JsonElement element) {
+        public void load(ResourceLocation key, JsonElement element) {
             final var result = codec.decode(JsonOps.INSTANCE, element);
             result.result().ifPresent(it -> registry.register(key, it.getFirst()));
             result.error().ifPresent(it -> LootJournal.LOG.error("Failed to register {} with key {}: {}", name, key, it.message()));

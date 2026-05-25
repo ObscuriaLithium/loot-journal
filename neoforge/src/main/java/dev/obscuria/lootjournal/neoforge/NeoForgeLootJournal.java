@@ -9,7 +9,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -26,16 +26,14 @@ public final class NeoForgeLootJournal {
                 NeoForgeLootJournal::createConfigScreen);
     }
 
-    private static void addClientReloadListeners(AddClientReloadListenersEvent event) {
-        event.addListener(
-                LootJournal.identifier("pickup_resources"),
-                PickupResourceManager.SHARED);
+    private static void addClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(PickupResourceManager.SHARED);
     }
 
     private static void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(
                 VanillaGuiLayers.SELECTED_ITEM_NAME,
-                LootJournal.identifier("pickup_component"),
+                LootJournal.id("pickup_component"),
                 PickupComponent::render);
     }
 

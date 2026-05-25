@@ -6,8 +6,8 @@ import dev.obscuria.lootjournal.client.events.PickupEvent;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.PlayerFaceExtractor;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.Nullable;
@@ -25,16 +25,16 @@ public record TotalToken() implements LayoutToken {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer renderer, int x) {
+    public void render(GuiGraphics graphics, PickupRenderer renderer, int x) {
         if (LootJournalHelper.isSelf(renderer.event().player())) {
             if (!renderer.event().supportsTotalCount()) return;
-            extractor.text(
+            graphics.drawString(
                     Minecraft.getInstance().font,
-                    format(renderer.event().total(), renderer.style()), x, 3, 0xFFFFFFFF,
+                    format(renderer.event().total(), renderer.style()), x, 3, 0xFFFFFF,
                     renderer.style().text().dropShadow().get());
         } else {
             var texture = renderer.event().player().getSkin();
-            PlayerFaceExtractor.extractRenderState(extractor, texture, x, 1, 12);
+            PlayerFaceRenderer.draw(graphics, texture, x, 1, 12);
         }
     }
 
@@ -44,7 +44,7 @@ public record TotalToken() implements LayoutToken {
     }
 
     private Component format(int total, @Nullable PickupStyle style) {
-        var color = style == null ? 0xffffff : style.text().totalCountColor().get().rgb();
+        var color = style == null ? 0xffffff : style.text().totalCountColor().get().toRGB().decimal();
         var textStyle = Style.EMPTY.withColor(color);
         return Component.literal(LootJournal.abbreviate(total)).withStyle(textStyle);
     }

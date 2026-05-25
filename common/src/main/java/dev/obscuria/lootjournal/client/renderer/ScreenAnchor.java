@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.Window;
 import dev.obscuria.lootjournal.client.registry.ThemeRegistry;
 import dev.obscuria.lootjournal.config.Config;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.function.BiFunction;
 
@@ -46,11 +46,11 @@ public enum ScreenAnchor {
         this.bottom = bottom;
     }
 
-    public void transform(GuiGraphicsExtractor extractor) {
+    public void transform(GuiGraphics graphics) {
         var window = Minecraft.getInstance().getWindow();
-        extractor.pose().translate(computeX(window), computeY(window));
+        graphics.pose().translate(computeX(window), computeY(window), 0);
         var scale = Config.SCALE.get().floatValue();
-        extractor.pose().scale(scale, scale);
+        graphics.pose().scale(scale, scale, scale);
     }
 
     public int computeX(Window window) {

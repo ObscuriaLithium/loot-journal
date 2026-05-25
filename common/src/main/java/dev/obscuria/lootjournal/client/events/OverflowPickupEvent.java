@@ -3,7 +3,7 @@ package dev.obscuria.lootjournal.client.events;
 import dev.obscuria.lootjournal.LootJournalHelper;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
 import dev.obscuria.lootjournal.client.themes.styles.PickupStyle;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -32,11 +32,11 @@ public final class OverflowPickupEvent implements PickupEvent {
     public void bind(PickupStyle style) {}
 
     @Override
-    public void renderIcon(GuiGraphicsExtractor extractor, PickupRenderer renderer) {
+    public void renderIcon(GuiGraphics graphics, PickupRenderer renderer) {
         if (stacks.isEmpty()) return;
         var interval = Math.max(0.2, 1.0 - 0.05 * stacks.size());
         var stack = stacks.get((int) (renderer.timeInSeconds() / interval % stacks.size()));
-        extractor.fakeItem(stack, -8, -8);
+        graphics.renderFakeItem(stack, -8, -8);
     }
 
     @Override

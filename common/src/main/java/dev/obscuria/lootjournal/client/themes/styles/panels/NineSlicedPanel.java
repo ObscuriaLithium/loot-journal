@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 
 public record NineSlicedPanel(
-        Identifier texture,
+        ResourceLocation texture,
         int textureWidth,
         int textureHeight,
         int uOffset,
@@ -27,7 +27,7 @@ public record NineSlicedPanel(
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer pickup) {
+    public void render(GuiGraphics graphics, PickupRenderer pickup) {
 
         var targetWidth = pickup.width();
         var targetHeight = pickup.height();
@@ -40,6 +40,7 @@ public record NineSlicedPanel(
 
         int centerW = targetWidth - left - right;
         int centerH = targetHeight - top - bottom;
+
         int texCenterW = uWidth - left - right;
         int texCenterH = vHeight - top - bottom;
 
@@ -51,64 +52,64 @@ public record NineSlicedPanel(
         int vBottom = vOffset + vHeight - bottom;
         int vCenter = vOffset + top;
 
-        // corners
-        blitSlice(extractor, 0, 0, left, top,
-                mirrored ? uRight : uLeft, vTop, left, top, mirrored);
+        blitSlice(graphics, 0, 0, left, top,
+                mirrored ? uRight : uLeft, vTop,
+                left, top, mirrored);
 
-        blitSlice(extractor, targetWidth - right, 0, right, top,
-                mirrored ? uLeft : uRight, vTop, right, top, mirrored);
+        blitSlice(graphics, targetWidth - right, 0, right, top,
+                mirrored ? uLeft : uRight, vTop,
+                right, top, mirrored);
 
-        blitSlice(extractor, 0, targetHeight - bottom, left, bottom,
-                mirrored ? uRight : uLeft, vBottom, left, bottom, mirrored);
+        blitSlice(graphics, 0, targetHeight - bottom, left, bottom,
+                mirrored ? uRight : uLeft, vBottom,
+                left, bottom, mirrored);
 
-        blitSlice(extractor, targetWidth - right, targetHeight - bottom, right, bottom,
-                mirrored ? uLeft : uRight, vBottom, right, bottom, mirrored);
+        blitSlice(graphics, targetWidth - right, targetHeight - bottom, right, bottom,
+                mirrored ? uLeft : uRight, vBottom,
+                right, bottom, mirrored);
 
-        // edges
-        blitSlice(extractor, left, 0, centerW, top,
-                uCenter, vTop, texCenterW, top, mirrored);
+        blitSlice(graphics, left, 0, centerW, top,
+                uCenter, vTop,
+                texCenterW, top, mirrored);
 
-        blitSlice(extractor, left, targetHeight - bottom, centerW, bottom,
-                uCenter, vBottom, texCenterW, bottom, mirrored);
+        blitSlice(graphics, left, targetHeight - bottom, centerW, bottom,
+                uCenter, vBottom,
+                texCenterW, bottom, mirrored);
 
-        blitSlice(extractor, 0, top, left, centerH,
-                mirrored ? uRight : uLeft, vCenter, left, texCenterH, mirrored);
+        blitSlice(graphics, 0, top, left, centerH,
+                mirrored ? uRight : uLeft, vCenter,
+                left, texCenterH, mirrored);
 
-        blitSlice(extractor, targetWidth - right, top, right, centerH,
-                mirrored ? uLeft : uRight, vCenter, right, texCenterH, mirrored);
+        blitSlice(graphics, targetWidth - right, top, right, centerH,
+                mirrored ? uLeft : uRight, vCenter,
+                right, texCenterH, mirrored);
 
-        // center
-        blitSlice(extractor, left, top, centerW, centerH,
-                uCenter, vCenter, texCenterW, texCenterH, mirrored);
+        blitSlice(graphics, left, top, centerW, centerH,
+                uCenter, vCenter,
+                texCenterW, texCenterH, mirrored);
     }
 
     private void blitSlice(
-            GuiGraphicsExtractor extractor,
+            GuiGraphics graphics,
             int x, int y,
             int w, int h,
             int u, int v,
             int texW, int texH,
             boolean mirrored
     ) {
-        if (w <= 0 || h <= 0) return;
-
-        float u0 = (float) u / textureWidth;
-        float u1 = (float) (u + texW) / textureWidth;
-        float v0 = (float) v / textureHeight;
-        float v1 = (float) (v + texH) / textureHeight;
-
         if (mirrored) {
-            float tmp = u0;
-            u0 = u1;
-            u1 = tmp;
+            u += texW;
+            texW = -texW;
         }
 
-        extractor.blit(texture, x, y, x + w, y + h, u0, u1, v0, v1);
+        graphics.blit(texture, x, y, w, h,
+                u, v, texW, texH,
+                textureWidth, textureHeight);
     }
 
     static {
         CODEC = RecordCodecBuilder.mapCodec(codec -> codec.group(
-                Identifier.CODEC.fieldOf("texture").forGetter(NineSlicedPanel::texture),
+                ResourceLocation.CODEC.fieldOf("texture").forGetter(NineSlicedPanel::texture),
                 Codec.INT.fieldOf("texture_width").forGetter(NineSlicedPanel::textureWidth),
                 Codec.INT.fieldOf("texture_height").forGetter(NineSlicedPanel::textureHeight),
                 Codec.INT.fieldOf("u_offset").forGetter(NineSlicedPanel::uOffset),

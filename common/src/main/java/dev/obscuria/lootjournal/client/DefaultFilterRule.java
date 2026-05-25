@@ -15,7 +15,7 @@ public enum DefaultFilterRule {
     public boolean isAllowed(ItemStack stack) {
 
         var item = stack.getItem();
-        var namespace = item.builtInRegistryHolder().key().identifier().getNamespace();
+        var namespace = item.builtInRegistryHolder().key().location().getNamespace();
 
         if (this == ALLOW_ALL) {
             return !ConfigCache.modBlacklist.contains(namespace)

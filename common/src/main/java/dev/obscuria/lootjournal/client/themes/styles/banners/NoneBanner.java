@@ -2,7 +2,7 @@ package dev.obscuria.lootjournal.client.themes.styles.banners;
 
 import com.mojang.serialization.MapCodec;
 import dev.obscuria.lootjournal.client.renderer.PickupRenderer;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 
 public record NoneBanner() implements PickupBanner {
 
@@ -15,5 +15,5 @@ public record NoneBanner() implements PickupBanner {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor extractor, PickupRenderer pickup) {}
+    public void render(GuiGraphics graphics, PickupRenderer pickup) {}
 }

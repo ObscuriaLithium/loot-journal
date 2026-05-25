@@ -2,7 +2,7 @@ package dev.obscuria.lootjournal;
 
 import dev.obscuria.lootjournal.client.registry.LootJournalRegistries;
 import dev.obscuria.lootjournal.config.Config;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -15,8 +15,8 @@ public final class LootJournal {
     public static final String DISPLAY_NAME = "Loot Journal";
     public static final Logger LOG = LoggerFactory.getLogger(DISPLAY_NAME);
 
-    public static Identifier identifier(String name) {
-        return Identifier.fromNamespaceAndPath(MOD_ID, name);
+    public static ResourceLocation id(String name) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
     }
 
     public static boolean isAllowed(Player player, ItemStack stack) {

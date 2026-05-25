@@ -2,7 +2,8 @@ package dev.obscuria.lootjournal.client.themes.styles.vars;
 
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import dev.obscuria.fragmentum.v2.api.common.Color;
+import dev.obscuria.fragmentum.content.util.color.ARGB;
+import dev.obscuria.fragmentum.content.util.color.Colors;
 import dev.obscuria.lootjournal.client.themes.BakedTheme;
 
 import java.util.Locale;
@@ -113,31 +114,33 @@ public interface VarType<V> {
         }
     };
 
-    VarType<Color> COLOR = new VarType<>() {
+    VarType<ARGB> COLOR_ARGB = new VarType<>() {
+
+        private static final ARGB WHITE = Colors.argbOf("#ffffffff");
 
         @Override
-        public <T> DataResult<Color> read(DynamicOps<T> ops, T input) {
-            return Color.codec().parse(ops, input);
+        public <T> DataResult<ARGB> read(DynamicOps<T> ops, T input) {
+            return ARGB.CODEC.parse(ops, input);
         }
 
         @Override
-        public Color bakeConfigValue(Object value) {
-            return Color.parse(String.valueOf(value)).asPacked();
+        public ARGB bakeConfigValue(Object value) {
+            return Colors.argbOf(String.valueOf(value));
         }
 
         @Override
-        public Color defaultValue() {
-            return Color.WHITE;
+        public ARGB defaultValue() {
+            return WHITE;
         }
 
         @Override
-        public Color cached(BakedTheme theme, String name) {
-            return theme.getCachedColor(name);
+        public ARGB cached(BakedTheme theme, String name) {
+            return theme.getCachedARGB(name);
         }
 
         @Override
         public String name() {
-            return "color";
+            return "modulate(argb)";
         }
     };
 
